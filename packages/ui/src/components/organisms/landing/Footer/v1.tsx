@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useTheme } from "next-themes";
-import { FooterProps, FooterSectionProps } from "@repo/ts-types/landing-page/footer";
-import { NavbarSectionProps } from "@repo/ts-types/landing-page/navbar";
+import { FooterSectionProps } from "@repo/ts-types/landing-page/footer";
+import { CompanyLogoName } from "../../../molecules/home/CompanyLogoName/v1";
 
 const Footer = ({footerSection}:{footerSection:FooterSectionProps}) => {
     const [footerTypes, setFooterTypes] = useState<any>([]);
@@ -19,19 +18,8 @@ const Footer = ({footerSection}:{footerSection:FooterSectionProps}) => {
         <hr className="w-full mx-auto" />
         <div className="w-full flex flex-wrap items-start justify-around gap-4 my-10 ">
             <section className="hidden lg:flex w-1/2 font-cyberdyne">
-                <a
-                    rel="noreferrer noopener"
-                    href="/"
-                    className="ml-2 flex items-center gap-2"
-                >
-                    {theme === "dark" ?
-                    <Image src={footerSection.darkLogo} alt={footerSection.title} width={40} height={40} /> : 
-                    <Image src={footerSection.logo} alt={footerSection.title} width={40} height={40} />}
-                    <div className="hidden lg:flex flex-col items-start text-md leading-none bg-gradient-to-r from-white to-white bg-clip-text text-transparent ">
-                        <div>{footerSection?.title?.split(' ').slice(0, Math.ceil(footerSection?.title?.split(' ').length / 2)).join(" ")}</div>
-                        <div>{footerSection?.title?.split(' ').slice(Math.ceil(footerSection?.title?.split(' ').length / 2)).join(" ")}</div>
-                    </div>
-                </a>
+                <CompanyLogoName logo={footerSection?.logo} darkLogo={footerSection?.darkLogo} name={footerSection?.title} />
+               
             </section>
             {[...footerTypes]?.map((type:string)=>(
                 <div key={type} className="flex flex-col gap-2">

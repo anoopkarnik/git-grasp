@@ -43,8 +43,7 @@ const data = {
 }
 
 
-export function SettingsDialog({children, open: controlledOpen, onOpenChange: setControlledOpen,
-  pricingList,supportEmailAddress,openedTab}: SettingsDialogProps) {
+export function SettingsDialog({children, open: controlledOpen, onOpenChange: setControlledOpen,openedTab}: SettingsDialogProps) {
   
     const { data:session,status } = useSession();
 
@@ -115,9 +114,6 @@ export function SettingsDialog({children, open: controlledOpen, onOpenChange: se
             <MyAccountSettings/>}
             {currentOpenedTab === "Sessions" && 
             <SessionSettings />}
-            {currentOpenedTab === "Plans & Billing" &&
-            <PlansBilling pricingList={pricingList} supportEmailAddress={supportEmailAddress || ''}/>}
-            
           </main>
         </SidebarProvider>
       </DialogContent>

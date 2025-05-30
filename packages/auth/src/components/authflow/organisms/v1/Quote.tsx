@@ -2,7 +2,7 @@ import {QuoteProps} from "../../../../utils/typescript"
 
 const Quote = ({quote}:{quote:QuoteProps}) => {
   return (
-    <div className='h-screen flex justify-center items-center flex-col '>
+    <div className='h-screen flex justify-center items-center flex-col mx-4'>
         <div className='flex flex-col justify-center text-left mx-[10%]'>
             <div className='text-4xl font-bold '>
                 {quote.title}

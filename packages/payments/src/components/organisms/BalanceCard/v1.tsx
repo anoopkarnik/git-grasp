@@ -6,8 +6,7 @@ import { CardFooter } from "@repo/ui/molecules/shadcn/card"
 export async function BalanceCard() {
   const userBalance = await GetAvailableCredits()
   return (
-    <Card className='bg-gradient-to-br from-primary/10 via-primary/5 to-background 
-    border-primary/20 shadow-lg flex justify-between flex-col overflow-hidden'>
+    <Card className='bg-sidebar shadow-lg flex justify-between flex-col overflow-hidden'>
       <CardContent className='p-6 relative items-center'>
         <div className='flex justify-between items-center'>
             <div>

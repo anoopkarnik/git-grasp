@@ -1,5 +1,5 @@
-import {User} from "@prisma/client";
-import { PricingProps } from "../landing-page/pricing";
+import { NavbarSectionProps } from "../landing-page/navbar";
+import { PricingProps, PricingSectionProps } from "../landing-page/pricing";
 
 export interface sidebarHeaderItemsProps{
     title: string;
@@ -26,22 +26,14 @@ export interface CompanyLogoNameProps {
 }
 
 
-export interface sidebarProps extends CompanyLogoNameProps,UserProps {
+export interface sidebarProps  {
+    navbarSection: NavbarSectionProps;
     items: sidebarHeaderProps;
     footerItems: sidebarFooterItemsProps[];
     showCredits: boolean;
-    userDetails: User;
 }
 
-
-
-export interface UserProps {
-    supportEmailAddress?: string;
-    pricingList: PricingProps[];
-}
-
-
-export interface SettingsDialogProps extends UserProps {
+export interface SettingsDialogProps {
     children?: React.ReactNode;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;

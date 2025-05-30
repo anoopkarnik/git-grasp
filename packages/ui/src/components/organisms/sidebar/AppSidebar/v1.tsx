@@ -1,3 +1,4 @@
+"use client";
 import {
     Sidebar,
     SidebarFooter,
@@ -11,17 +12,19 @@ import { CompanyLogoName } from "../../../molecules/home/CompanyLogoName/v1";
 import SidebarItems from "../../../molecules/sidebar/SidebarItems/v1";
 import SidebarUser  from "../../../molecules/sidebar/SidebarUser/v1";
 import ProgressWithCredits from "@repo/payments/components/molecules/ProgressWithCredits/v1";
+import { useSession } from "@repo/auth/better-auth/auth-client";
 
-export function AppSidebar({name,logo,darkLogo,items,footerItems,pricingList,supportEmailAddress,showCredits,
-    userDetails}:sidebarProps) {
-        
+export function AppSidebar({navbarSection,items,footerItems,showCredits}:sidebarProps) {
+       
+    const { data:session } = useSession();
+    
     return (
         <Sidebar>
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <CompanyLogoName logo={logo} darkLogo={darkLogo} name={name}/>
+                            <CompanyLogoName logo={navbarSection?.logo} darkLogo={navbarSection?.darkLogo} name={navbarSection?.title} />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -32,8 +35,8 @@ export function AppSidebar({name,logo,darkLogo,items,footerItems,pricingList,sup
             <SidebarFooter>
                 {/* {userDetails?.access === "TRIAL" ? <UpgradeToProButton />:null} */}
                 {showCredits && 
-                <ProgressWithCredits creditsUsed={userDetails?.creditsUsed } creditsTotal={userDetails?.creditsTotal}/>}
-                <SidebarUser  pricingList={pricingList} supportEmailAddress={supportEmailAddress}   />
+                <ProgressWithCredits creditsUsed={session.user.creditsUsed} creditsTotal={session.user.creditsTotal}/>}
+                <SidebarUser  />
             </SidebarFooter>
         </Sidebar>
     );

@@ -30,13 +30,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../../../organisms/shadcn/sidebar"
-import { UserProps } from "@repo/ts-types/home/v1"
 import { SettingsDialog } from "../../../templates/settings/Settings/v1"
 import { Theme } from "../../home/Theme/v1"
 import { authClient, useSession } from "@repo/auth/better-auth/auth-client"
 import { useRouter } from "next/navigation"
 
-const SidebarUser = ({ supportEmailAddress,    pricingList}:UserProps) => {
+const SidebarUser = () => {
 
   const { data:session,status } = useSession();
 
@@ -111,8 +110,6 @@ const SidebarUser = ({ supportEmailAddress,    pricingList}:UserProps) => {
                     setIsDropdownOpen(true)
                   }
                 }}
-                pricingList={pricingList}
-                supportEmailAddress={supportEmailAddress}
               >
                 <DropdownMenuItem 
                   className="flex gap-2 cursor-pointer" 
