@@ -1,0 +1,19 @@
+{
+  "name": "@repo/ai",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "exports":{
+    "./*": "./src/*.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^4.77.0",
+    "@repo/auth": "*"
+  }
+}

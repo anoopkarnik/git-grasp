@@ -1,0 +1,216 @@
+// import { describe, test, expect, beforeEach, afterEach, vi, Mock } from 'vitest';
+// import { renderHook, act } from '@testing-library/react';
+// import { RecoilRoot } from 'recoil';
+// import { NotificationProps } from "@repo/ts-types/home/v1";
+// import { notificationsState } from "@repo/recoil/notification";
+// import { getNotificationsAction } from '../../../../app/_actions/notifications';
+// import { useNotificationPolling } from '../../../../app/hooks/useNotificationPolling';
+
+// // Mock the notifications action
+// vi.mock('../_actions/notifications', () => ({
+//   getNotificationsAction: vi.fn()
+// }));
+
+// describe('useNotificationPolling', () => {
+//   const mockGetNotifications = getNotificationsAction as Mock;
+  
+//   // Create a mock notification that matches the full interface
+//   const createMockNotification = (id: string): NotificationProps => ({
+//     id,
+//     message: `Test message ${id}`,
+//     type: 'info',
+//     href: `/notification/${id}`,
+//     read: false,
+//     createdAt: new Date().toISOString(),
+//     updatedAt: new Date().toISOString()
+//   });
+
+//   beforeEach(() => {
+//     vi.useFakeTimers();
+//     mockGetNotifications.mockClear();
+//   });
+
+//   afterEach(() => {
+//     vi.useRealTimers();
+//     vi.clearAllMocks();
+//   });
+
+//   test('initializes with default values', () => {
+//     const { result } = renderHook(() => useNotificationPolling('test-user'), {
+//       wrapper: RecoilRoot
+//     });
+
+//     expect(result.current.notifications).toEqual([]);
+//     expect(result.current.isLoading).toBe(false);
+//     expect(result.current.error).toBeNull();
+//   });
+
+//   test('starts polling on mount with provided userId', async () => {
+//     const mockData: NotificationProps[] = [
+//       createMockNotification('1'),
+//       createMockNotification('2')
+//     ];
+//     mockGetNotifications.mockResolvedValue(mockData);
+
+//     const { result } = renderHook(() => useNotificationPolling('test-user', 1000), {
+//       wrapper: RecoilRoot
+//     });
+
+//     expect(result.current.isLoading).toBe(true);
+
+//     await act(async () => {
+//       await vi.runAllTimersAsync();
+//     });
+
+//     expect(mockGetNotifications).toHaveBeenCalledWith('test-user');
+//     expect(result.current.notifications).toEqual(mockData);
+//     expect(result.current.isLoading).toBe(false);
+//     expect(result.current.error).toBeNull();
+//   });
+
+//   test('continues polling at specified interval', async () => {
+//     const mockData: NotificationProps[] = [
+//       createMockNotification('1'),
+//       createMockNotification('2')
+//     ];
+//     mockGetNotifications.mockResolvedValue(mockData);
+
+//     renderHook(() => useNotificationPolling('test-user', 1000), {
+//       wrapper: RecoilRoot
+//     });
+
+//     await act(async () => {
+//       await vi.runAllTimersAsync();
+//     });
+
+//     expect(mockGetNotifications).toHaveBeenCalledTimes(1);
+
+//     await act(async () => {
+//       await vi.advanceTimersByTimeAsync(1000);
+//     });
+
+//     expect(mockGetNotifications).toHaveBeenCalledTimes(2);
+//   });
+
+//   test('handles error cases properly', async () => {
+//     const error = new Error('Failed to fetch notifications');
+//     mockGetNotifications.mockRejectedValue(error);
+
+//     const { result } = renderHook(() => useNotificationPolling('test-user'), {
+//       wrapper: RecoilRoot
+//     });
+
+//     await act(async () => {
+//       await vi.runAllTimersAsync();
+//     });
+
+//     expect(result.current.error).toEqual(error);
+//     expect(result.current.notifications).toEqual([]);
+//     expect(result.current.isLoading).toBe(false);
+//   });
+
+//   test('handles non-Error rejection properly', async () => {
+//     mockGetNotifications.mockRejectedValue('string error');
+
+//     const { result } = renderHook(() => useNotificationPolling('test-user'), {
+//       wrapper: RecoilRoot
+//     });
+
+//     await act(async () => {
+//       await vi.runAllTimersAsync();
+//     });
+
+//     expect(result.current.error).toEqual(new Error('Unknown error occurred'));
+//     expect(result.current.isLoading).toBe(false);
+//   });
+
+//   test('cleans up interval on unmount', async () => {
+//     const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
+    
+//     const { unmount } = renderHook(() => useNotificationPolling('test-user'), {
+//       wrapper: RecoilRoot
+//     });
+
+//     unmount();
+
+//     expect(clearIntervalSpy).toHaveBeenCalled();
+//   });
+
+//   test('does not fetch if userId is empty', async () => {
+//     const { result } = renderHook(() => useNotificationPolling('', 1000), {
+//       wrapper: RecoilRoot
+//     });
+
+//     await act(async () => {
+//       await vi.runAllTimersAsync();
+//     });
+
+//     expect(mockGetNotifications).not.toHaveBeenCalled();
+//     expect(result.current.notifications).toEqual([]);
+//   });
+
+//   test('refresh function clears notifications', async () => {
+//     const mockData: NotificationProps[] = [
+//       createMockNotification('1'),
+//       createMockNotification('2')
+//     ];
+//     mockGetNotifications.mockResolvedValue(mockData);
+
+//     const { result } = renderHook(() => useNotificationPolling('test-user'), {
+//       wrapper: RecoilRoot
+//     });
+
+//     await act(async () => {
+//       await vi.runAllTimersAsync();
+//     });
+
+//     expect(result.current.notifications).toEqual(mockData);
+
+//     act(() => {
+//       result.current.refresh();
+//     });
+
+//     expect(result.current.notifications).toEqual([]);
+//   });
+
+//   test('handles changing notification states', async () => {
+//     const initialNotification = createMockNotification('1');
+//     const updatedNotification: NotificationProps = {
+//       ...initialNotification,
+//       read: true,
+//       updatedAt: new Date().toISOString()
+//     };
+
+//     mockGetNotifications
+//       .mockResolvedValueOnce([initialNotification])
+//       .mockResolvedValueOnce([updatedNotification]);
+
+//     const { result } = renderHook(() => useNotificationPolling('test-user', 1000), {
+//       wrapper: RecoilRoot
+//     });
+
+//     // First poll
+//     await act(async () => {
+//       await vi.runAllTimersAsync();
+//     });
+
+//     expect(result.current.notifications[0].read).toBe(false);
+
+//     // Second poll after interval
+//     await act(async () => {
+//       await vi.advanceTimersByTimeAsync(1000);
+//     });
+
+//     expect(result.current.notifications[0].read).toBe(true);
+//   });
+
+//   test('uses default interval value when not provided', () => {
+//     const setIntervalSpy = vi.spyOn(global, 'setInterval');
+    
+//     renderHook(() => useNotificationPolling('test-user'), {
+//       wrapper: RecoilRoot
+//     });
+
+//     expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 30000);
+//   });
+// });

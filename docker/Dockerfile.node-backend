@@ -1,0 +1,24 @@
+# --- Builder Stage ---
+FROM node:18 AS builder
+
+WORKDIR /app
+
+# Copy ONLY root package files and lockfile for dependency installation layer
+COPY package.json package-lock.json ./
+
+# Copy the workspace package.jsons (so npm install works with monorepo deps)
+COPY apps/node-backend/package.json apps/node-backend/
+
+# Install dependencies (npm workspaces handles local packages)
+RUN npm install
+
+# Copy the rest of the code
+COPY . .
+
+# Build everything (or just the backend and its deps)
+RUN cd apps/node-backend && npm run build
+RUN cd packages/prisma-db && npm run postgres:generate
+
+EXPOSE 8020
+
+CMD ["npm","run","start:nodejs-app"]

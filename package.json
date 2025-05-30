@@ -1,0 +1,44 @@
+{
+  "name": "turborepo-saas-boilerplate-code",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "start": "turbo start",
+    "test": "turbo test",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "start:nodejs-app": "cd apps/node-backend && npm run start",
+    "db:migrate": "cd packages/prisma-db && npm run prisma:migrate --name init",
+    "db:generate": "cd packages/prisma-db && npm run postgres:generate",
+    "postinstall": "",
+    "db:seed": "cd packages/prisma-db && npx prisma db seed"
+  },
+  "devDependencies": {
+    "@repo/auth": "*",
+    "@vitest/coverage-v8": "^3.0.4",
+    "@vitest/ui": "^3.0.4",
+    "prettier": "^3.4.2",
+    "sonarqube-scanner": "^4.2.6",
+    "turbo": "^2.3.3",
+    "typescript": "5.5.4",
+    "vitest": "^3.0.4"
+  },
+  "engines": {
+    "node": ">=22.9.0"
+  },
+  "packageManager": "npm@11.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@sparticuz/chromium": "^132.0.0",
+    "cheerio": "^1.0.0",
+    "dodopayments": "^0.19.0",
+    "nextjs-toploader": "^3.7.15",
+    "puppeteer-core": "^24.1.1",
+    "react-dropzone": "^14.3.8",
+    "swr": "^2.3.2"
+  }
+}
