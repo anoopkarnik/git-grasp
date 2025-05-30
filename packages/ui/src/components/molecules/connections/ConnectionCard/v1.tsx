@@ -7,7 +7,7 @@ import { Dialog, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } f
 import { ConnectionCardProps } from '@repo/connections/lib/ts-types'
 import { Button } from '../../../atoms/shadcn/button'
 import { DialogContent } from '@radix-ui/react-dialog'
-import AddConnectionsModal from '../../../organisms/connections/AddConnectionsModal/v1'
+import AddConnectionsModal from '@repo/connections/components/AddConnectionsModal'
 import { useTheme } from 'next-themes'
 
 

@@ -25,7 +25,6 @@ import MyAccountSettings from "@repo/auth/components/authmanagement/organisms/v1
 import { cn } from "../../../../lib/utils"
 import { SettingsDialogProps } from "@repo/ts-types/home/v1"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../atoms/shadcn/avatar"
-import MyConnectionsSettings from "../../../organisms/connections/MyConnectionSettings/v1"
 import SessionSettings from "@repo/auth/components/authmanagement/organisms/v1/SessionSettings"
 import PlansBilling from "@repo/payments/components/organisms/PlansBilling/v1"
 import { useSession } from "@repo/auth/better-auth/auth-client"

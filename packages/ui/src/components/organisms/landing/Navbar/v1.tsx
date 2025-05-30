@@ -21,12 +21,14 @@ import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { NavbarSectionProps, RouteProps } from "@repo/ts-types/landing-page/navbar";
 import { CompanyLogoName } from "../../../molecules/home/CompanyLogoName/v1";
+import { useRouter } from "next/navigation";
 
 const Navbar = ({navbarSection,showLandingRoutes=true}: {
   navbarSection: NavbarSectionProps,showLandingRoutes?:boolean}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const {theme} = useTheme();
   const [starCount, setStarCount] = useState<number>(0);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchStarCount = async () => {
@@ -98,11 +100,21 @@ const Navbar = ({navbarSection,showLandingRoutes=true}: {
                       <GitHubLogoIcon className="mr-2 w-5 h-5" />
                     {starCount}
                   </a>
-                  <a rel="noreferrer noopener" href={process.env.NEXT_PUBLIC_DODO_PAYMENTS_DONATIONS_URL}>    
+                  { navbarSection.donateNowLink && 
+                  <a rel="noreferrer noopener" href={navbarSection?.donateNowLink}>    
                     <Button size="sm" className="rounded-sm">
                       Donate Now
                     </Button>
-                  </a>
+                  </a>}
+                { navbarSection.getStartedLink &&           
+                  <Button
+                  className="flex items-center gap-2"
+                    variant="default"
+                    size="sm"
+                    onClick={() => navbarSection.getStartedLink && router.push(navbarSection.getStartedLink)}
+                  > 
+                  Get Started
+                </Button>}
                 </nav>
               </SheetContent>
             </Sheet>
@@ -134,11 +146,21 @@ const Navbar = ({navbarSection,showLandingRoutes=true}: {
               <GitHubLogoIcon className="mr-2 w-5 h-5" />
               {starCount}
             </a>
-            <a rel="noreferrer noopener" href={process.env.NEXT_PUBLIC_DODO_PAYMENTS_DONATIONS_URL}>    
+            { navbarSection.donateNowLink && 
+            <a rel="noreferrer noopener" href={navbarSection?.donateNowLink}>    
               <Button size="sm" className="rounded-sm" >
                 Donate Now
               </Button>
-            </a>
+            </a>}
+            { navbarSection.getStartedLink &&           
+                <Button
+                className="flex items-center gap-2"
+                  variant="default"
+                  size="sm"
+                  onClick={() => navbarSection.getStartedLink && router.push(navbarSection.getStartedLink)}
+                > 
+                Get Started
+              </Button>}
 
             {/* <ModeToggle /> */}
           </div>

@@ -36,7 +36,7 @@ export const useData = () => {
   const [contactUsState, setContactUsState] = useState(contactUs);
 
   useEffect(() => {
-    const storedConstantsType = localStorage.getItem("constantsType") || "cms";
+    const storedConstantsType = "cms";
     setConstantsType(storedConstantsType);
 
     if (storedConstantsType === "cms") {
@@ -50,6 +50,7 @@ export const useData = () => {
     setIsLoading(true);
     try {
       const saasDetails = await getSaaSDetails();
+      console.log("SaaS Details:", saasDetails);
       setNavbarSectionState(saasDetails.navbarSection);
       setHeroSectionState(saasDetails.heroSection);
       setFeatureSectionState(saasDetails.featureSection);

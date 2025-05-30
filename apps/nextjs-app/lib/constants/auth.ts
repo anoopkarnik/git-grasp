@@ -1,5 +1,5 @@
 export const quote = {
-    title: "The only way to do great work is to love what you do.",
-    author: "Late Steve Jobs",
-    credential: "Ex CEO of Apple Inc.",
+  title: "The strength of the team is each individual member. The strength of each member is the team.",
+  author: "Phil Jackson",
+  credential: "Legendary NBA Coach",
 }

@@ -2,9 +2,8 @@
 
 import { auth } from "@repo/auth/better-auth/auth";
 import db from "@repo/prisma-db/client";
-import { AccountAccess } from "@prisma/client";
 import { LogCollector } from "@repo/ts-types/scrape-flow/log";
-import { billingAddressSchemaType } from "@repo/zod/billing";
+import { billingAddressSchemaType } from "./utils";
 import { createNewCustomer } from "./dodo/server-actions";
 import { headers } from "next/headers";
 
@@ -154,17 +153,6 @@ export const increaseCredits = async (userId: string, credits: number) => {
             creditsUsed: {
                 increment: credits
             }
-        }
-    });
-    return user;
-}
-
-export const modifyAccess = async (id: string, access:string)=>{
-    const user = await db.user.update({
-        where: {id},
-        data: {
-            access: access as AccountAccess,
-            creditsTotal: 200
         }
     });
     return user;

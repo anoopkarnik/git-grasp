@@ -7,7 +7,7 @@ import React, { useCallback, useState } from 'react'
 import CustomDialogHeader from '@repo/ui/molecules/misc/CustomDialogHeader/v1'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
-import { addOAuthConnectionSchema, addOAuthConnectionSchemaType} from '@repo/zod/scrape-flow/connection'
+import { addOAuthConnectionSchema, addOAuthConnectionSchemaType} from '../lib/zod'
 import  {Form, FormField, FormItem, FormMessage, FormControl, FormLabel, FormDescription} from '@repo/ui/molecules/shadcn/form'
 import { Input } from '@repo/ui/atoms/shadcn/input'
 import { Textarea } from '@repo/ui/atoms/shadcn/textarea'

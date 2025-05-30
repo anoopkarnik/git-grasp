@@ -11,7 +11,6 @@ import { CompanyLogoName } from "../../../molecules/home/CompanyLogoName/v1";
 import SidebarItems from "../../../molecules/sidebar/SidebarItems/v1";
 import SidebarUser  from "../../../molecules/sidebar/SidebarUser/v1";
 import ProgressWithCredits from "@repo/payments/components/molecules/ProgressWithCredits/v1";
-import NotificationSheet from "../../home/NotificationSheet/v1";
 
 export function AppSidebar({name,logo,darkLogo,items,footerItems,pricingList,supportEmailAddress,showCredits,
     userDetails}:sidebarProps) {
@@ -29,9 +28,6 @@ export function AppSidebar({name,logo,darkLogo,items,footerItems,pricingList,sup
             </SidebarHeader>
             <SidebarItems items={items}/>
             {/* <SidebarFooterItems footerItems={footerItems}/> */}
-            <SidebarFooter className="p-0">
-                <NotificationSheet />
-            </SidebarFooter>
 
             <SidebarFooter>
                 {/* {userDetails?.access === "TRIAL" ? <UpgradeToProButton />:null} */}

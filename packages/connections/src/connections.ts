@@ -2,7 +2,7 @@
 
 import db from "@repo/prisma-db/client"
 import { ConnectionType } from "./lib/ts-types";
-import { addApiKeyConnectionSchema, addApiKeyConnectionSchemaType, addOAuthConnectionSchema, addOAuthConnectionSchemaType } from "@repo/zod/scrape-flow/connection";
+import { addApiKeyConnectionSchema, addApiKeyConnectionSchemaType, addOAuthConnectionSchema, addOAuthConnectionSchemaType } from "./lib/zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { symmetricEncrypt } from "../../../apps/nextjs-app/lib/helper/encryption";

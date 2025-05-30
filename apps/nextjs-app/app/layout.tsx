@@ -13,8 +13,6 @@ import NextTopLoader from "nextjs-toploader";
 import { VercelAnalytics,VercelSpeedInsights } from "@repo/analytics/vercel.ts";
 import { GoogleAnalytics } from "@repo/analytics/google.ts";
 import { DataProvider } from "../context/DataContext";
-import ActiveStatus from "./(home)/(clones)/messenger-clone/_components/common/ActiveStatus";
-
 
 
 export const metadata: Metadata = {
@@ -34,7 +32,6 @@ export default function RootLayout({
             <NextTopLoader color="#10b981" showSpinner={false} />
             <ThemeProvider defaultTheme="dark"   >
               <DataProvider>
-                <ActiveStatus/>
               {children}
               </DataProvider>
               <VercelAnalytics/>
