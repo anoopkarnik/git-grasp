@@ -1,7 +1,7 @@
 "use client"
 
 import { SidebarProvider, SidebarTrigger } from "@repo/ui/organisms/shadcn/sidebar"
-import { AppSidebar } from "@repo/ui/organisms/sidebar/AppSidebar/v1"
+import { AppSidebar } from "../../components/Sidebar"
 import { sidebarFooterItems, sidebarItems } from "../../lib/constants/home"
 import { useSession} from "@repo/auth/better-auth/auth-client";
 import { RecoilRoot } from "recoil";
@@ -11,12 +11,14 @@ import LoadingPage from "@repo/ui/templates/landing/LoadingPage/v1";
 import Support from "@repo/ui/organisms/support/Support/v1";
 import { useGlobalData } from "../../context/DataContext";
 import { redirect } from "next/navigation";
+import useProject from "../../hooks/useProject";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 
     const data = useGlobalData();
     const { isPending,data:session } = useSession();
+    const {projects} = useProject()
 
     if (isPending) {
       return <LoadingPage />;
@@ -34,6 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             items={sidebarItems}
             footerItems={sidebarFooterItems}
             showCredits={true}
+            projects={projects}
           />
         <div className="flex flex-col flex-1 max-h-screen">
           <div className="flex items-center gap-4 py-2">

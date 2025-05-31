@@ -8,9 +8,9 @@ model GithubProject {
     updatedAt     DateTime @updatedAt
 
     userToProjects UserToGithubProject[]
-    commits  GithubCommit[]
     sourceCodeEmbeddings SourceCodeEmbedding[]
     savedQuestions     Question[]
+    syllabus           Syllabus?
 
     @@schema("gitgrasp_schema")
 }
@@ -30,24 +30,6 @@ model UserToGithubProject {
     @@unique([userId, githubProjectId])
 }
 
-model GithubCommit {
-    id            String   @id @default(cuid()) @map("_id")
-    projectId     String
-    commitMessage String
-    commitHash    String
-    commitAuthorName String
-    commitAuthorAvatar String
-    commitDate DateTime
-    summary     String
-
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
-
-    project GithubProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-    @@schema("gitgrasp_schema")
-}
-
 model Question {
     id            String   @id @default(cuid()) @map("_id")
     question      String
@@ -65,8 +47,6 @@ model Question {
     user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
     @@schema("gitgrasp_schema")
 }
-
-
 
 model SourceCodeEmbedding {
     id            String   @id @default(cuid()) @map("_id")

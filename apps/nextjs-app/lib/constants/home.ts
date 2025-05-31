@@ -1,5 +1,5 @@
 import { sidebarFooterItemsProps, sidebarHeaderProps } from "@repo/ts-types/home/v1"
-import {  Home, BoxesIcon, CoinsIcon} from "lucide-react"
+import {  Home, BoxesIcon, CoinsIcon, ShieldQuestionIcon, SchoolIcon} from "lucide-react"
 
 export const sidebarItems:sidebarHeaderProps = 
 {
@@ -7,6 +7,8 @@ export const sidebarItems:sidebarHeaderProps =
         {title: "Home", url: "/", icon: Home},
         {title: "Connections", url: "/connections", icon: BoxesIcon},
         {title: "Billing", url: "/billing", icon: CoinsIcon},
+        {title: "Q&A", url: "/questions", icon: ShieldQuestionIcon},
+        {title: "Quiz", url: "/quizzes", icon: SchoolIcon}
     ],
 }
 

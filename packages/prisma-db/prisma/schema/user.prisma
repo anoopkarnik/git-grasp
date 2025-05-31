@@ -18,6 +18,7 @@ model User {
   connections   Connection[]
   userToProjects UserToGithubProject[]
   questionsAsked    Question[]
+  quizzesTaken       Quiz[]
 
   password      String?
 
