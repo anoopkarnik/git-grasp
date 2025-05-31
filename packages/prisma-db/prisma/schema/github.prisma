@@ -52,8 +52,9 @@ model SourceCodeEmbedding {
     id            String   @id @default(cuid()) @map("_id")
     projectId     String
     
-    sourceCode        String
+    sourceCode       String
     fileName         String
+    
     summary         String
     summaryEmbedding Unsupported("vector(1536)")?
 

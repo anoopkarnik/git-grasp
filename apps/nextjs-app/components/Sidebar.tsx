@@ -20,7 +20,7 @@ interface Props extends sidebarProps {
     projects?: GithubProject[]; // Adjust type as necessary
 }
 
-export function AppSidebar({navbarSection,items,footerItems,showCredits,projects}:Props) {
+export function AppSidebar({navbarSection,items,showCredits,projects}:Props) {
        
     const { data:session } = useSession()
     const { setProjectId, projectId } = useProject();

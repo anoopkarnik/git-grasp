@@ -47,7 +47,7 @@ export async function summariseCode(doc: Document,type:string="OpenAI") {
   try {
     const code = doc.pageContent.slice(0, 10000);
     const systemPrompt = `
-      ou are a senior software engineer onboarding a junior developer. You explain files in a simple and clear way.`;
+      You are a senior software engineer onboarding a junior developer. You explain files in a simple and clear way.`;
     const userPrompt =  `
       You're explaining the purpose of the file: ${doc.metadata.source}
 

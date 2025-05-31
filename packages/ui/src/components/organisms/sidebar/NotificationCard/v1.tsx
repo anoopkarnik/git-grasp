@@ -2,7 +2,6 @@ import React from 'react'
 import { cn } from '../../../../lib/utils';
 import { useRouter } from 'next/navigation';
 import { useNotifications, useSetNotifications } from '../../../../../../state-management/src/recoil/notification';
-import { updateNotificationAction } from '@repo/server-utils/notification';
 
 const NotificationCard = ({notification}:any) => {
   function getRelativeTime(createdAt: Date) {
@@ -28,7 +27,6 @@ const NotificationCard = ({notification}:any) => {
   const setNotifications = useSetNotifications();
 
   const handleClick = () =>{
-    updateNotificationAction(notification.id);
     setNotifications(notifications.map((n) => {
       if(n.id === notification.id){
         return {...n,read:true}
