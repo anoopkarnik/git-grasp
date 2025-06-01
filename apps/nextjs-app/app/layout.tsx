@@ -10,7 +10,6 @@ import { ThemeProvider } from "@repo/ui/providers/theme-provider";
 import { Toaster } from "@repo/ui/molecules/home/Toaster/v1";
 import { TanstackProvider } from "../providers/tanstack-provider";
 import NextTopLoader from "nextjs-toploader";
-import { VercelAnalytics} from "@repo/analytics/vercel.ts";
 import { DataProvider } from "../context/DataContext";
 
 
@@ -33,7 +32,6 @@ export default function RootLayout({
               <DataProvider>
               {children}
               </DataProvider>
-              <VercelAnalytics/>
               <Toaster />
             </ThemeProvider>
           </TanstackProvider>
