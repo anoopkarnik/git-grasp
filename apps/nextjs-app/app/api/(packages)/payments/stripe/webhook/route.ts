@@ -22,8 +22,6 @@ export async function POST (request: NextRequest){
 
     const session = event.data.object as Stripe.Checkout.Session;
 
-    console.log(event.type);
-
     if(event.type === "checkout.session.completed"){
         const credits = Number(session.metadata?.['credits']);
         const userId = session.client_reference_id;

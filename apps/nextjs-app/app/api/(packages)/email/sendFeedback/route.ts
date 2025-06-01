@@ -5,8 +5,8 @@ export async function POST(req: Request) {
   try {
     const { subject, message } = await req.json();
 
-    const response = await sendSupportEmail(subject,message)
-    console.log(response)
+    await sendSupportEmail(subject,message)
+
 
     return NextResponse.json({ success: true, message: "Feedback received!" });
   } catch (error) {

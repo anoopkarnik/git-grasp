@@ -10,8 +10,7 @@ import { ThemeProvider } from "@repo/ui/providers/theme-provider";
 import { Toaster } from "@repo/ui/molecules/home/Toaster/v1";
 import { TanstackProvider } from "../providers/tanstack-provider";
 import NextTopLoader from "nextjs-toploader";
-import { VercelAnalytics,VercelSpeedInsights } from "@repo/analytics/vercel.ts";
-import { GoogleAnalytics } from "@repo/analytics/google.ts";
+import { VercelAnalytics} from "@repo/analytics/vercel.ts";
 import { DataProvider } from "../context/DataContext";
 
 
@@ -35,13 +34,9 @@ export default function RootLayout({
               {children}
               </DataProvider>
               <VercelAnalytics/>
-              <VercelSpeedInsights/>
               <Toaster />
             </ThemeProvider>
           </TanstackProvider>
-        <GoogleAnalytics
-          gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID as string}
-        />
       </body>
     </html>
   );

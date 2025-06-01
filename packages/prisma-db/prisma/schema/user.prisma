@@ -10,7 +10,7 @@ model User {
   banExpires    Int?
 
   creditsUsed   Int             @default(0)
-  creditsTotal  Int             @default(20)
+  creditsTotal  Int             @default(2000)
 
   accounts      Account[]
   sessions      Session[]

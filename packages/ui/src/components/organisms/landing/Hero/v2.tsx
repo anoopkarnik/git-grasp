@@ -23,7 +23,6 @@ const Hero = ({heroSection, features ,testimonials, pricingList,teamList,videoUr
     const [taglineArray,setTaglineArray] = useState<string[]>([])
     const router = useRouter()
     useEffect(()=>{
-       console.log("heroSection",heroSection)
         if(heroSection.tagline){
             setTaglineArray(heroSection.tagline.split(" "))
         }

@@ -43,7 +43,7 @@ Summarize the following git diff into a concise list of meaningful commit commen
 };
 
 export async function summariseCode(doc: Document,type:string="OpenAI") {
-  console.log('getting summary for', doc.metadata.source);
+
   try {
     const code = doc.pageContent.slice(0, 10000);
     const systemPrompt = `

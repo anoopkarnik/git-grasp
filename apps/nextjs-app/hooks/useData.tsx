@@ -50,7 +50,6 @@ export const useData = () => {
     setIsLoading(true);
     try {
       const saasDetails = await getSaaSDetails();
-      console.log("SaaS Details:", saasDetails);
       setNavbarSectionState(saasDetails.navbarSection);
       setHeroSectionState(saasDetails.heroSection);
       setFeatureSectionState(saasDetails.featureSection);
