@@ -96,7 +96,16 @@ const Hero = ({heroSection, features ,testimonials, pricingList,teamList,videoUr
             <ContainerScroll titleComponent={<></>}>
                 <CarouselContent className="">
 
-
+                    {heroSection.videoUrl && 
+                      <CarouselItem className="flex items-center justify-center relative ">
+                          <video
+                            src={heroSection.videoUrl}
+                            controls
+                            loop
+                            className="rounded-lg  object-cover h-full w-full"
+                          />
+                        </CarouselItem>
+                    }
                     {heroSection.images?.map((image, index) => (
                         <CarouselItem key={index} className="flex items-center justify-center relative ">
                             <Image 

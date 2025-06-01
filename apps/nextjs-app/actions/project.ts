@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import db from "@repo/prisma-db/client";
 import { revalidatePath } from "next/cache";
 import { checkCredits, indexGithubRepo } from "../lib/helper/github";
+import axios from "axios";
 
 export const getProjects = async () => {
     const session = await auth.api.getSession({
@@ -50,6 +51,7 @@ export const createProject = async ({githubUrl, name, githubToken}:{githubUrl:st
             }
         }
     });
+
     await indexGithubRepo(project.id, githubUrl, githubToken);
     await db.user.update({
         where: {
@@ -60,6 +62,11 @@ export const createProject = async ({githubUrl, name, githubToken}:{githubUrl:st
                 increment: fileCount, // Assuming each project creation costs 1 credit
             },
         },
+    })
+    await axios.post(process.env.GENERATE_SYLLABUS_N8N_WEBHOOK_URL!,{
+        projectId: project.id,
+        githubUrl,
+        githubToken
     })
     revalidatePath('/ai-github/projects');
     return project;

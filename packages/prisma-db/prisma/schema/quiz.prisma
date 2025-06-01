@@ -7,7 +7,7 @@ model Syllabus {
 
 
     projectId     String  @unique
-    project       GithubProject @relation(fields: [projectId], references: [id])
+    project       GithubProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
      
     @@schema("gitgrasp_schema")
 }
@@ -18,6 +18,9 @@ model Topic {
     description   String
     quizzes       Quiz[]
     level         Int
+    subTopic      String
+    language      String
+    framework     String
 
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt

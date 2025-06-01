@@ -85,7 +85,7 @@ export const indexGithubRepo = async (projectId: string, githubUrl: string, gith
         })
         const embeddingValues = `[${embedding.embedding.join(',')}]`
         const sqlString = `
-            UPDATE "github_schema"."SourceCodeEmbedding"
+            UPDATE "gitgrasp_schema"."SourceCodeEmbedding"
             SET "summaryEmbedding" = '${embeddingValues}'::vector
             WHERE "_id" = '${sourceCodeEmbedding.id}';
             `;
