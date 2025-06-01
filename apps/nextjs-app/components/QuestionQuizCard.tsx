@@ -10,7 +10,6 @@ import { cn } from '@repo/ui/lib/utils';
 const QuestionQuizCard = ({quizId}: {quizId:string}) => {
 
     const [questions,setQuestions] = useState<any[]>([]); // Replace 'any' with your question type
-    const [loading, setLoading] = useState(false);
     const [answers, setAnswers] = useState<string[]>([]);
     const [marksGiven, setMarksGiven] = useState<any[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -79,7 +78,7 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
         <div className='flex items-center justify-center gap-4 mb-16'>
             <Button 
                 variant='shimmer'
-                disabled={loading}
+                disabled={isSubmitted}
                 onClick={()=>{handleSubmit()}}
             >
                 Submit Quiz
