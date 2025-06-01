@@ -52,7 +52,7 @@ const Dashboard = () => {
                 <div className='text-2xl font-semibold my-4 mx-8'>
                     Topics
                 </div>
-                <div className='grid grid-cols-3  gap-4 mx-4'>
+                <div className='grid grid-cols-3  gap-4 mx-4 mb-10'>
                     {topics?.map((topic) => (
                         <TopicCard key={topic.id}
                         topic={topic}

@@ -108,7 +108,7 @@ const AskQuestionCard = () => {
                     <Textarea placeholder="Which file should I edit to change the home page?"
                     value={question} onChange={e=>setQuestion(e.target.value)}/>
                     <div className='h-4'></div>
-                    <Button type='submit' variant='default' className='' disabled={loading}>
+                    <Button type='submit' variant='shimmer' className='' disabled={loading}>
                         Ask Sam
                     </Button>
                 </form>

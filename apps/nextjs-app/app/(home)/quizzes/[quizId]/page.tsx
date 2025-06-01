@@ -1,9 +1,15 @@
 import React from 'react'
+import QuestionQuizCard from '../../../../components/QuestionQuizCard';
 
-const page = () => {
+type Props = {
+    params: Promise<{quizId: string}>
+}
+
+const QuizQuestionPage = async ({params} : Props) => {
+    const {quizId} = await params;
   return (
-    <div>page</div>
+    <QuestionQuizCard quizId={quizId}/>
   )
 }
 
-export default page
+export default QuizQuestionPage

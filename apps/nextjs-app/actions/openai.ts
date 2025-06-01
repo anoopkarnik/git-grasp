@@ -1,9 +1,10 @@
 "use server"
 import {streamText} from "ai";
 import { createStreamableValue } from "ai/rsc";
-import { generateEmbedding } from "@repo/ai/openai/base";
+import { chatCompletion, generateEmbedding } from "@repo/ai/openai/base";
 import db from "@repo/prisma-db/client";
 import { openai } from '@ai-sdk/openai';
+import type { QuizQuestion } from "@prisma/client"
 
 
 export async function askQuestion(question: string, projectId: string) {
@@ -14,12 +15,11 @@ export async function askQuestion(question: string, projectId: string) {
     const result = await db.$queryRaw`
     Select "fileName", "summary", "sourceCode",
     1-("summaryEmbedding" <=> ${vectorQuery}::vector) as "similarity"
-    from "github_schema"."SourceCodeEmbedding"
+    from "gitgrasp_schema"."SourceCodeEmbedding"
     where  1-("summaryEmbedding" <=> ${vectorQuery}::vector) > 0.4
     and "projectId" = ${projectId}
     order by "similarity" desc
     limit 10` as {fileName: string, summary: string, sourceCode: string, similarity: number}[];
-    console.log(result)
     let context = ''
 
     for (const doc of result) {
@@ -67,4 +67,65 @@ export async function askQuestion(question: string, projectId: string) {
         output: stream.value,
         fileReferences: result
     }
+}
+
+export const getMarks = async (questions:QuizQuestion[], answers: string[] ) => {
+    const results = [];
+
+  for (let i = 0; i < questions.length; i++) {
+        // MCQ/Objective auto check
+        if (answers[i] && answers[i] === questions[i]?.answer) {
+        results.push({
+            score: questions[i]?.scoreMax,
+            comment: "Perfect! Your answer is correct."
+        });
+        continue;
+        }
+
+        // Use OpenAI for subjective/other cases
+        const prompt = `
+                Question: ${questions[i]?.question}
+                Correct Answer: ${questions[i]?.answer}
+                User Answer: ${answers[i]}
+
+                Score out of ${questions[i]?.scoreMax} (if mostly correct, partial marks are ok): 
+                Comment: (Brief, helpful feedback, even if correct. Max 2 sentences.)
+
+                Respond only in JSON: 
+                {
+                "score": number,
+                "comment": "string"
+                }
+        `;
+
+        const response = await chatCompletion({
+            apiKey: process.env.OPENAI_API_KEY || '',
+            model: 'gpt-4o',
+            systemMessage: "You are a helpful AI assistant that provides feedback on quiz answers.",
+            userMessages: [prompt],
+            temperature: 0.2
+        })
+
+        // Parse JSON from OpenAI's response
+        const match = response.choices?.[0]?.message?.content?.match(/\{[^}]+\}/s);
+        let aiResult = { score: 0, comment: "No feedback generated." };
+        if (match && match[0]) {
+        try {
+            aiResult = JSON.parse(match[0]);
+        } catch (e) {
+            // fallback: use text directly
+            aiResult = { score: 0, comment: response.choices?.[0]?.message?.content?.trim() ?? "No feedback generated." };
+        }
+        }
+
+        results.push(aiResult);
+        await db.quizQuestion.update({
+            where: { id: questions[i]?.id },
+            data: {
+                score: aiResult.score
+            }
+        })
+  }
+
+  return results; // [{ score, comment }, ...] for each question
 }
