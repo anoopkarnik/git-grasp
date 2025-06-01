@@ -12,8 +12,6 @@ import TypewriterComponent from 'typewriter-effect';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../../molecules/shadcn/carousel";
 import { BackgroundBeams } from "../../../molecules/aceternity/background-beams";
 import Image from "next/image";
-import { Spotlight } from "../../../molecules/aceternity/spotlight-new";
-import { LampContainer } from "../../../molecules/aceternity/lamp";
 import { ContainerScroll } from "../../aceternity/container-scroll-animation";
 
 
@@ -97,12 +95,10 @@ const Hero = ({heroSection, features ,testimonials, pricingList,teamList,videoUr
 
                     {heroSection.videoUrl && 
                       <CarouselItem className="flex items-center justify-center relative ">
-                          <video
-                            src={heroSection.videoUrl}
-                            controls
-                            loop
-                            className="rounded-lg  object-cover h-full w-full"
-                          />
+
+                      <iframe className="w-full min-h-[650px]"
+                      src={heroSection.videoUrl} />
+
                         </CarouselItem>
                     }
                     {heroSection.images?.map((image, index) => (
