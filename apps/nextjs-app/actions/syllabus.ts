@@ -57,7 +57,7 @@ export const createQuiz = async (topicId: string, totalQuestions: number) => {
     return quiz;
 }
 
-export const getQuizzes = async () => {
+export const getQuizzes = async (projectId: string) => {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -66,7 +66,12 @@ export const getQuizzes = async () => {
     }
     const quizzes = await db.quiz.findMany({
         where: {
-            userId: session.user.id
+            userId: session.user.id,
+            topic: {
+                syllabus: {
+                    projectId
+                }
+            }
         },
         include: {
             topic: true,

@@ -16,7 +16,7 @@ const TopicCard = ({topic}:{topic:Topic}) => {
          justify-between'>
             <CardHeader>
                 <CardTitle className='text-lg'>{topic.subTopic} - {topic.name}</CardTitle>
-                <div className='flex items-center gap-2 justify-start'>
+                <div className='flex items-center gap-2 justify-start flex-wrap'>
                     <Badge className='bg-blue-400 hover:bg-blue-400'>
                         {topic.language}
                     </Badge>
