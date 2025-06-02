@@ -40,9 +40,9 @@ const LoginContent = () => {
   return (
     <div className='min-h-screen grid grid-cols-1 lg:grid-cols-2 '>
         <div className='flex items-center justify-center bg-gradient-to-br from-primary to-sidebar dark:bg-gradient-to-br'>
-            <LoginCard showEmail={true} showGoogleProvider={false} 
+            <LoginCard showEmail={true} showGoogleProvider={true} 
             showGithubProvider={true}
-              showLinkedinProvider={false} onEmailSubmit={loginWithEmail} 
+              showLinkedinProvider={true} onEmailSubmit={loginWithEmail} 
               onGoogleProviderSubmit={()=>loginWithSocials('google')} 
               onGithubProviderSubmit={()=>loginWithSocials('github')} 
               onLinkedinProviderSubmit={()=>loginWithSocials('linkedin')} 

@@ -11,6 +11,7 @@ const QAPage = () => {
 
   useEffect(()=>{
     const fetchQuestions = async () => {
+      if (!projectId) return;
       const data = await getQuestions(projectId)
       setQuestions(data)
     }

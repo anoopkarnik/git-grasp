@@ -13,7 +13,7 @@ const ArchiveButton = () => {
   return (
     <Button size={'sm'} variant={'destructive'} onClick={async ()=>{
         const confirm = window.confirm("Are you sure you want to archive this project? This action cannot be undone.");
-        if (confirm) {
+        if (confirm && projectId) {
             await archiveProject( projectId );
             toast({
                 title: 'Project Archived',

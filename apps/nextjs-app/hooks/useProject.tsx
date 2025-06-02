@@ -6,7 +6,7 @@ import { GithubProject} from "@prisma/client"
 
 const useProject = () => {
     const [projects, setProjects] = useState<GithubProject[]>([])
-    const [projectId, setProjectId] = useState<string | null>(null)
+    const [projectId, setProjectId] = useLocalStorage<string | null>("projectId", null);
     const [project, setProject] = useState<GithubProject>()
 
     const refreshProjects = useCallback(async () => {

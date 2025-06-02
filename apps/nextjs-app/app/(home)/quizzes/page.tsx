@@ -16,6 +16,7 @@ const Quizzes = () => {
 
     useEffect(() => {
         const fetchQuizzes = async () => {
+            if (!projectId) return;
             try {
                 const data = await getQuizzes(projectId)
                 setQuizzes(data)
