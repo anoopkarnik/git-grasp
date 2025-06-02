@@ -5,24 +5,27 @@ import  {useLocalStorage} from "usehooks-ts"
 import { GithubProject} from "@prisma/client"
 
 const useProject = () => {
-    const [projects, setProjects] = useState<GithubProject[]>([])
-    const [projectId, setProjectId] = useLocalStorage<string | null>("projectId", null);
-    const [project, setProject] = useState<GithubProject>()
+  const isClient = typeof window !== "undefined"; // Basic check
+  const [projects, setProjects] = useState<GithubProject[]>([]);
+  const [projectId, setProjectId] = isClient ? useLocalStorage<string | null>("projectId", null) : [null, () => {}];
+  const [project, setProject] = useState<GithubProject>();
 
-    const refreshProjects = useCallback(async () => {
-      const projects = await getProjects()
-      setProjects(projects)
-      setProject(projects.find((project) => project.id === projectId))
-    }, [projectId])
+  const refreshProjects = useCallback(async () => {
+    if (!isClient) return;
+    const projects = await getProjects();
+    setProjects(projects);
+    if (projectId && projects.length > 0) {
+      setProject(projects.find((project) => project.id === projectId));
+    }
+  }, [projectId, isClient]);
 
-    useEffect(()=>{
-        const fetchProjects = async () => {
-            await refreshProjects()
-        }
-        fetchProjects() 
-    }, [refreshProjects])
+  useEffect(() => {
+    if (!isClient) return;
+    refreshProjects();
+  }, [refreshProjects, isClient]);
 
-   return {projects,projectId, project,setProjectId,refreshProjects}
-}
+  return { projects, projectId, project, setProjectId, refreshProjects };
+};
+
 
 export default useProject
