@@ -20,6 +20,7 @@ export async function askQuestion(question: string, projectId: string) {
     and "projectId" = ${projectId}
     order by "similarity" desc
     limit 10` as {fileName: string, summary: string, sourceCode: string, similarity: number}[];
+    console.log('query result', result)
     let context = ''
 
     for (const doc of result) {

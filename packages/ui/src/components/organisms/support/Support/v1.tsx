@@ -107,9 +107,9 @@ const Support = ({
                     </DropdownMenuItem>}
             </div>
           </TabsContent>
-          <TabsContent value="supportbot">
+          {/* <TabsContent value="supportbot">
             <SupportChat />
-          </TabsContent>
+          </TabsContent> */}
           <TabsContent value="chat">
             <CrispChat />
           </TabsContent>
@@ -134,7 +134,7 @@ const Support = ({
             <TabsTrigger value="feedback">Feedback</TabsTrigger>
             <TabsTrigger value="resources">Resources</TabsTrigger>
             <TabsTrigger value="chat">Chat</TabsTrigger>
-            <TabsTrigger value="supportbot">Support Bot</TabsTrigger>
+            {/* <TabsTrigger value="supportbot">Support Bot</TabsTrigger> */}
             <TabsTrigger value="social">Social</TabsTrigger>
           </TabsList>
         </Tabs>

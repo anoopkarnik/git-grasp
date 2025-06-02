@@ -1,6 +1,6 @@
 # 🚀 Git Grasp
 
-**Git Grasp** is an AI-powered tool that transforms any GitHub repository into a personalized, structured learning journey—complete with quizzes, level-based syllabuses, and grasp tracking.
+**Git Grasp** is an AI-powered web-app that transforms any GitHub repository into a personalized, structured learning journey—complete with quizzes, level-based syllabuses, and grasp tracking.
 
 > 💡 Designed to reduce ramp-up time for engineers joining new teams, projects, or open source communities.
 
@@ -38,12 +38,11 @@
 
 ✅ GitHub OAuth authentication  
 ✅ Repo-to-project linking (1:1)  
-✅ Level-based syllabus generation (via n8n AI agent)  
+✅ Level-based syllabus generation (via n8n AI workflow)  
 ✅ MCQ and subjective quizzes (LLM auto-graded)  
 ✅ Grasp Score calculation  
 ✅ Dashboard, quizzes, and progress tabs  
 ✅ Encrypted user-supplied OpenAI API keys  
-✅ Deployed on Vercel
 
 ---
 
@@ -64,7 +63,6 @@
 - 🧪 Code execution quizzes  
 - 📦 Multi-repo project support  
 - 🔔 Email/Slack reminders for score drops  
-- 📂 GitLab & Bitbucket integrations  
 - 🤝 Human-in-the-loop reviews  
 - 🔍 Team analytics & dashboards  
 
