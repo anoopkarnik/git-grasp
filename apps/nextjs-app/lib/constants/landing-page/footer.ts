@@ -1,7 +1,12 @@
 import { FooterProps, FooterSectionProps } from "@repo/ts-types/landing-page/footer";
-import { creator, creatorLink, title, logo, darkLogo } from "../appDetails";
 
-export const footerList: FooterProps[] =  [
+const creator = "Anoop Karnik";
+const creatorLink = "https://anoopkarnik.net";
+const title = "Git Grasp";
+const logo = "https://strapi.bayesian-labs.com/uploads/icon_494a035f1f.png";
+const darkLogo = "https://strapi.bayesian-labs.com/uploads/icon_494a035f1f.png";
+
+const footerList: FooterProps[] =  [
         {
             label: "Twitter",
             href: "https://x.com/anooplegend1992",

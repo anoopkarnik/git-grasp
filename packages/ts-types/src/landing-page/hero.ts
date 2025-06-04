@@ -1,16 +1,18 @@
 
 export interface HeroSectionProps  {
     documentationLink?: string;
-    getStartedLink?: string;
+    appointmentLink?: string;
+    tagline?: string;
+    description?: string;
     blogLink?: string;
-    tagline: string;
-    description: string;
-    version?: string;
+    getStartedLink?: string;
+    version: string;
     videoUrl?: string;
-    images?: imageWithTitleProps[];
+    images: ImageProps[];
+    
 }
 
-  export interface imageWithTitleProps {
+export interface ImageProps {
     title: string;
     imageUrl: string;
-  }
+}

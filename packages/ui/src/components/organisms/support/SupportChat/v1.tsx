@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../../atoms/shadcn/button';
 import { Textarea } from '../../../atoms/shadcn/textarea';
-import { chatWithAssistant} from "../../../../../../ai/src/openai/assistant";
-import { ChatBubbleIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { useSession } from '@repo/auth/better-auth/auth-client';
 import { Skeleton } from '../../../molecules/shadcn/skeleton';
@@ -14,14 +12,6 @@ export const SupportChat = () => {
   const [waitingForReply, setWaitingForReply] = useState(false);
   const [firstMessage, setFirstMessage] = useState(true);
 
-  const sendMessage = async () => {
-    setWaitingForReply(true);
-    setUserInput('');
-    setMessages((prevMessages) => [...prevMessages, { role: 'user', value: userInput }]);
-    const reply = await chatWithAssistant(userInput);
-    setMessages((prevMessages) => [...prevMessages, { role: 'assistant', value: reply }]);
-    setWaitingForReply(false);
-  };
 
   const formatMessage = (message: string): string => {
     return message
@@ -76,18 +66,6 @@ export const SupportChat = () => {
           </div>
           }
         </div>
-      </div>
-      <div role="button" tabIndex={0} className='flex items-center ' onKeyPress={(e) => e.key === 'Enter' && sendMessage()}>
-        <Textarea
-          className='flex-1 bg-background border-none rounded-none rounded-bl-lg min-h-[60px] max-h-[60px] focus-visible:ring-offset-0 focus-visible:ring-0 '
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Type your message..."
-        />
-        <Button onClick={sendMessage} 
-        className='m-0 p-6 rounded-none rounded-br-lg border-0 min-h-[60px] max-h-[60px]'>
-          Send
-        </Button>
       </div>
     </div>
 

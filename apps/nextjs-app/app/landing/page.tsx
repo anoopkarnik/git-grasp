@@ -32,7 +32,6 @@ export default function Landing() {
         teamSection={data.teamSectionState}
         faqSection={data.faqSectionState}
         pricingSection={data.pricingSectionState}
-        newsletterSection={data.newsletterSectionState} 
         footerSection={data.footerSectionState}
         functionsToUse={functionsToUse}
       />

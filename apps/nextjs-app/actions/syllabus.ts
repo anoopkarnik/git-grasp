@@ -13,7 +13,7 @@ export const getTopics = async (projectId:string) => {
         },
     });
     if (!syllabus) {
-        throw new Error("Syllabus not found for the project");
+        return [];
     }
 
     const topics = await db.topic.findMany({

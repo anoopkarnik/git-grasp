@@ -9,14 +9,6 @@ services:
       - "3000:3000"
     image: anoopkarnik/turborepo-saas-boilerplate-code-nextjs-app:latest
     restart: always
-  
-  docs:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.docs
-    ports:
-      - "3010:3010"
-    image: anoopkarnik/turborepo-saas-boilerplate-code-docs:latest
-    restart: always
+
 
 

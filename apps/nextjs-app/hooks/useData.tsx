@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import { navbarSection } from "../lib/constants/landing-page/navbar";
 import { testimonialSection } from "../lib/constants/landing-page/testimonials";
 import { footerSection } from "../lib/constants/landing-page/footer";
-import { teamSection } from "../lib/constants/landing-page/team";
 import { heroSection } from "../lib/constants/landing-page/hero";
-import { newsletterSection } from "../lib/constants/landing-page/newsletter";
 import { faqSection } from "../lib/constants/landing-page/faq";
 import { pricingSection } from "../lib/constants/landing-page/pricing";
 import { featureSection } from "../lib/constants/landing-page/features";
@@ -18,16 +16,12 @@ import { getLegalDetails, getSaaSDetails } from "@repo/storage/strapi/landing";
 
 export const useData = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [constantsType, setConstantsType] = useState("file");
-
   const [navbarSectionState, setNavbarSectionState] = useState(navbarSection);
   const [heroSectionState, setHeroSectionState] = useState(heroSection);
   const [featureSectionState, setFeatureSectionState] = useState(featureSection);
   const [testimonialSectionState, setTestimonialSectionState] = useState(testimonialSection);
-  const [teamSectionState, setTeamSectionState] = useState(teamSection);
   const [faqSectionState, setFaqSectionState] = useState(faqSection);
   const [pricingSectionState, setPricingSectionState] = useState(pricingSection);
-  const [newsletterSectionState, setNewsletterSectionState] = useState(newsletterSection);
   const [footerSectionState, setFooterSectionState] = useState(footerSection);
 
   const [termsOfServiceState, setTermsOfServiceState] = useState(termsOfService);
@@ -36,10 +30,11 @@ export const useData = () => {
   const [contactUsState, setContactUsState] = useState(contactUs);
 
   useEffect(() => {
-    const storedConstantsType = "cms";
-    setConstantsType(storedConstantsType);
+      const source = process.env.NEXT_PUBLIC_CMS_SOURCE;
 
-    if (storedConstantsType === "cms") {
+    if (source === "strapi") {
+      console.log("Fetching data from Strapi CMS");
+      // If the source is Strapi, fetch data from Strapi CMS
       updateDataFromStrapiCms();
     } else {
       setIsLoading(false);
@@ -54,10 +49,8 @@ export const useData = () => {
       setHeroSectionState(saasDetails.heroSection);
       setFeatureSectionState(saasDetails.featureSection);
       setTestimonialSectionState(saasDetails.testimonialSection);
-      setTeamSectionState(saasDetails.teamSection);
       setFaqSectionState(saasDetails.faqSection);
       setPricingSectionState(saasDetails.pricingSection);
-      setNewsletterSectionState(saasDetails.newsletterSection);
       setFooterSectionState(saasDetails.footerSection);
 
       const legalDetails = await getLegalDetails();
@@ -77,10 +70,8 @@ export const useData = () => {
     setHeroSectionState(heroSection);
     setFeatureSectionState(featureSection);
     setTestimonialSectionState(testimonialSection);
-    setTeamSectionState(teamSection);
     setFaqSectionState(faqSection);
     setPricingSectionState(pricingSection);
-    setNewsletterSectionState(newsletterSection);
     setFooterSectionState(footerSection);
     setPrivacyPolicyState(privacyPolicy);
     setTermsOfServiceState(termsOfService);
@@ -88,17 +79,6 @@ export const useData = () => {
     setContactUsState(contactUs);
   };
 
-  const handleConstantsType = async () => {
-    if (constantsType === "file") {
-      await updateDataFromStrapiCms();
-      setConstantsType("cms");
-      localStorage.setItem("constantsType", "cms");
-    } else {
-      updateDataFromFiles();
-      setConstantsType("file");
-      localStorage.setItem("constantsType", "file");
-    }
-  };
 
   return {
     isLoading,
@@ -106,16 +86,12 @@ export const useData = () => {
     heroSectionState,
     featureSectionState,
     testimonialSectionState,
-    teamSectionState,
     faqSectionState,
     pricingSectionState,
-    newsletterSectionState,
     footerSectionState,
     termsOfServiceState,
     privacyPolicyState,
     cancellationRefundPoliciesState,
-    contactUsState,
-    constantsType,
-    handleConstantsType,
+    contactUsState
   };
 };

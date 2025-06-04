@@ -6,7 +6,6 @@ import Footer from '../../organisms/landing/Footer/v1';
 import HeroV1 from '../../organisms/landing/Hero/v1';
 import HeroV2 from '../../organisms/landing/Hero/v2';
 
-import Newsletter from '../../organisms/landing/Newsletter/v1';
 import Pricing from '../../organisms/landing/Pricing/v1';
 import Team from '../../organisms/landing/Team/v1';
 import TestimonialsV1 from '../../organisms/landing/Testimonials/v1';
@@ -26,9 +25,6 @@ export const sectionRegistry = {
   },
   team: {
     v1: Team
-  },
-  newsletter: {
-    v1: Newsletter
   },
   faq: {
     v1: FAQ

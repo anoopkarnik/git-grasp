@@ -1,0 +1,310 @@
+{
+  "name": "Create Quiz & Rate Quiz",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "gitgrasp_schema",
+          "mode": "list",
+          "cachedResultName": "gitgrasp_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "Topic",
+          "mode": "list",
+          "cachedResultName": "Topic"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "_id",
+              "value": "={{ $json.body.topicId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        220,
+        0
+      ],
+      "id": "7a949dd9-5250-4e4c-873c-c671d43bac73",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "VjESJEN8UuXK7gtx",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-4-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a smart Question Paper Generator AI.\n\nYour task is to create a **set of well-structured short and long answer questions** based on the following inputs:\n\n### Inputs:\n- **Topic Name**: [Insert Main Topic]\n- **Subtopic Name**: [Insert Subtopic Name]\n- **Subtopic Description**: [Briefly describe the subtopic]\n- **Difficulty Level (1 to 10)**: [Enter number]\n- **Number of Questions Required**: [Enter total number of questions]\n\n### Output Instructions:\n1. Output Format:\n  {\n     \"Topic\": ,\n     \"Subtopic\": ,\n     \"Description\": ,\n     \"Difficulty Level\": ,\n     \"Total Questions\" : ,\n     \"Questions\": [\n       {\n      \"Number\": ,\n      \"Type\": ,\n      \"Marks\": ,\n      \"Question\": ,\n      \"Answer\": \n       }\n     ]\n\n  }\n2. **Mix of Short and Long Answer Questions**:\n   - Divide the number of questions equally (or nearly equally) between short and long.\n   - Adjust question complexity according to the difficulty level.\n   - Use difficulty level to determine how conceptually deep or application-based each question is.\n\n3. **Question Format**:\n   - Each question should be numbered.\n   - Include the **question type**: Short or Long Answer.\n   - Assign **appropriate marks**: \n     - Short Answer = 2 or 3 marks \n     - Long Answer = 5 to 10 marks depending on difficulty\n\n4. **Question Clarity & Bloom’s Taxonomy**:\n   - Ensure questions assess a range of cognitive skills (Remember, Understand, Apply, Analyze, Evaluate, Create).\n   - Maintain clear, student-friendly language.\n\n5. **Output Format Example**:\n  {\n  \"Topic\": \"Algebra\",\n  \"Subtopic\": \"Quadratic Equations\",\n  \"Description\": \"This subtopic covers the formulation, solution, and application of quadratic equations.\",\n  \"Difficulty Level\": 7,\n  \"Total Questions\": 6,\n  \"Questions\": [\n    {\n      \"Number\": 1,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"Explain how the discriminant determines the nature of roots in a quadratic equation.\",\n      \"Answer\": \"The discriminant (D) of a quadratic equation ax² + bx + c = 0 is D = b² - 4ac. If D > 0: two real and distinct roots. If D = 0: two real and equal roots. If D < 0: two complex roots.\"\n    },\n    {\n      \"Number\": 2,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 2,\n      \"Question\": \"Write the standard form of a quadratic equation and give one example.\",\n      \"Answer\": \"The standard form is ax² + bx + c = 0. Example: 2x² - 3x + 1 = 0\"\n    },\n    {\n      \"Number\": 3,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 5,\n      \"Question\": \"Solve the equation x² - 5x + 6 = 0 and interpret its solution graphically.\",\n      \"Answer\": \"Factoring: x² - 5x + 6 = (x - 2)(x - 3) = 0. So, x = 2 and x = 3. Graphically, these are the x-intercepts of the parabola y = x² - 5x + 6.\"\n    },\n    {\n      \"Number\": 4,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 7,\n      \"Question\": \"A projectile follows the path y = -x² + 4x. Find its maximum height.\",\n      \"Answer\": \"Vertex form: y = -x² + 4x → complete the square: y = -(x² - 4x) = -(x² - 4x + 4 - 4) = -((x - 2)² - 4) = - (x - 2)² + 4. So, vertex is at (2, 4), maximum height = 4 units.\"\n    },\n    {\n      \"Number\": 5,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"What does 'completing the square' mean in solving a quadratic equation?\",\n      \"Answer\": \"It means rewriting a quadratic into a perfect square form like (x + p)² = q to solve it easily.\"\n    },\n    {\n      \"Number\": 6,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 10,\n      \"Question\": \"A ball is thrown upward with initial velocity 20 m/s from ground level. Using s = ut - ½gt², when will it hit the ground?\",\n      \"Answer\": \"Set s = 0, u = 20 m/s, g = 9.8 m/s². 0 = 20t - ½ × 9.8 × t² → 0 = t(20 - 4.9t) → t = 0 (start), t = 20 / 4.9 ≈ 4.08 seconds. Ball hits the ground after ~4.08 seconds.\"\n    }\n  ]\n}\n",
+              "role": "system"
+            },
+            {
+              "content": "=### Inputs:\n- **Topic Name**: {{ $json.name }}\n- **Subtopic Name**: {{ $json.subTopic }}\n- **Subtopic Description**: {{ $json.description }}\n- **Difficulty Level (1 to 10)**: {{ $json.level }}\n- **Number of Questions Required**: {{ $('Create Quiz Webhook').item.json.body.totalQuestions }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        440,
+        0
+      ],
+      "id": "ebf856eb-c9d4-461b-9c01-dedb30ab6ca5",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "K9lcYRM5A96ouQ0w",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "message.content.Questions",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ],
+      "id": "f9025895-e09b-428a-a60f-de8f4fa65a97",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "gitgrasp_schema",
+          "mode": "list",
+          "cachedResultName": "gitgrasp_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "QuizQuestion",
+          "mode": "list",
+          "cachedResultName": "QuizQuestion"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "_id": "={{ Math.random().toString(36)}}",
+            "question": "={{ $json.Question }}",
+            "answer": "={{ $json.Answer }}",
+            "createdAt": "2025-06-01T15:40:03",
+            "updatedAt": "2025-06-01T15:40:06",
+            "quizId": "={{ $('Create Quiz Webhook').item.json.body.quizId }}",
+            "type": "={{ $json.Type }}",
+            "scoreMax": "={{ $json.Marks }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "_id",
+              "displayName": "_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "question",
+              "displayName": "question",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "answer",
+              "displayName": "answer",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chosenAnswer",
+              "displayName": "chosenAnswer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updatedAt",
+              "displayName": "updatedAt",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quizId",
+              "displayName": "quizId",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "scoreMax",
+              "displayName": "scoreMax",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1020,
+        0
+      ],
+      "id": "ad884281-d768-44cc-9cbd-04c7a9370767",
+      "name": "Postgres1",
+      "credentials": {
+        "postgres": {
+          "id": "VjESJEN8UuXK7gtx",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3627b6d1-2af7-425d-b361-2c3a4f43e392",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6cb73d51-8515-468e-bd19-e3b4143c9cc0",
+      "name": "Create Quiz Webhook",
+      "webhookId": "3627b6d1-2af7-425d-b361-2c3a4f43e392"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Quiz Webhook": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "98dc3142-063b-4f33-9000-a4d8d62b27f6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3ea3309fa20b7f3f323ca8f5d7472e74e7934f6f5b29e1bf57d9f03c0707feb5"
+  },
+  "id": "YWswgNOk4YMCsDPp",
+  "tags": []
+}

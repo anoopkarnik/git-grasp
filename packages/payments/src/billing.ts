@@ -4,7 +4,6 @@ import { auth } from "@repo/auth/better-auth/auth";
 import db from "@repo/prisma-db/client";
 import { LogCollector } from "@repo/ts-types/scrape-flow/log";
 import { billingAddressSchemaType } from "./utils";
-import { createNewCustomer } from "./dodo/server-actions";
 import { headers } from "next/headers";
 
 
@@ -82,54 +81,6 @@ export async function GetUserPurchaseHistory() {
     })
 }
 
-export async function AddUserAddress(form: billingAddressSchemaType){
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-    if (!session?.user?.id) {
-        throw new Error("User not authenticated");
-    }
-
-    const userFinancial = await db.userFinancial.findUnique({
-        where: {
-            userId: session.user.id
-        }
-    })
-
-    if (!userFinancial){
-        const customer = await createNewCustomer(form.name,form.email)
-        await db.userFinancial.create({
-            data:{
-                name: form.name,
-                email: form.email,
-                street: form.street,    
-                city: form.city,
-                state: form.state,
-                zipcode: form.zipcode,
-                country: form.country,
-                customerId: customer.customer_id,
-                userId: session.user.id
-            }
-        })
-    }
-    else {
-        await db.userFinancial.update({
-            where:{
-                userId: session.user.id
-            },
-            data:{
-                name: form.name,
-                email: form.email,
-                street: form.street,    
-                city: form.city,
-                state: form.state,
-                zipcode: form.zipcode,
-                country: form.country,
-            }
-        })
-    }
-  
-}
 
 export async function GetUserAddress(){
     const session = await auth.api.getSession({

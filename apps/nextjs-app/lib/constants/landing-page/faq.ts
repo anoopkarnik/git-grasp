@@ -1,7 +1,9 @@
 import { faqProps } from "@repo/ts-types/landing-page/faq";
-import { supportEmailAddress } from "../appDetails";
 
-export const faqList: faqProps[] = [
+const heading = "Frequently Asked Questions"
+const description = undefined
+const supportEmailAddress = "support@bayesian-labs.com"
+const faqList: faqProps[] = [
     {
         question: "Is this boilerplate code free?",
         answer: "Yes. It is a free and open-source boilerplate code.",
@@ -33,10 +35,12 @@ export const faqList: faqProps[] = [
         value: "item-5",
       },
 ];
+const version = "v1";
 
 export const faqSection = {
-    faqList: faqList,
-    heading: "Frequently Asked Questions",
-    description: "",
+    heading,
+    description,
     supportEmailAddress,
+    faqList,
+    version
 };

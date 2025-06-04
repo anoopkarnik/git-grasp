@@ -5,7 +5,8 @@ import "../../../packages/ui/src/styles/custom/scroll.css"
 import "../../../packages/ui/src/styles/custom/heroBackgroundAnimation.css"
 import "../../../packages/ui/src/styles/custom/spotlight.css"
 import { geistSans, geistMono, cyberdyne } from "@repo/ui/typography/font";
-import { productDetails, title } from "../lib/constants/appDetails";
+import { navbarSection} from "../lib/constants/landing-page/navbar";
+import { heroSection } from "../lib/constants/landing-page/hero";
 import { ThemeProvider } from "@repo/ui/providers/theme-provider";
 import { Toaster } from "@repo/ui/molecules/home/Toaster/v1";
 import { TanstackProvider } from "../providers/tanstack-provider";
@@ -14,8 +15,8 @@ import { DataProvider } from "../context/DataContext";
 
 
 export const metadata: Metadata = {
-  title: title,
-  description: productDetails,
+  title: navbarSection.title,
+  description: heroSection.description,
 };
 
 export default function RootLayout({

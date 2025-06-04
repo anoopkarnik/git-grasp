@@ -8,7 +8,7 @@ export interface NavbarSectionProps {
     githubLink: string;
     githubUsername: string;
     githubRepositoryName: string;
-    donateNowLink: string;
+    donateNowLink?: string;
     getStartedLink: string;
     title: string;
     logo: string;

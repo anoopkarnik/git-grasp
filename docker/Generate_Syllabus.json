@@ -1,0 +1,502 @@
+{
+  "name": "Generate Syllabus",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c0a889f3-3256-4a75-a4b6-067413917ee3",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        80,
+        -20
+      ],
+      "id": "8781c20d-e4e8-4904-9b0c-a2abf2bf44e8",
+      "name": "Webhook",
+      "webhookId": "c0a889f3-3256-4a75-a4b6-067413917ee3"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "gitgrasp_schema",
+          "mode": "list",
+          "cachedResultName": "gitgrasp_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "SourceCodeEmbedding",
+          "mode": "list",
+          "cachedResultName": "SourceCodeEmbedding"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "projectId",
+              "value": "={{ $json.projectId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        640,
+        -20
+      ],
+      "id": "ae5b51ae-9557-48ae-9cdb-64e625188e63",
+      "name": "Get all Files from a Repo",
+      "alwaysOutputData": false,
+      "credentials": {
+        "postgres": {
+          "id": "VjESJEN8UuXK7gtx",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-NANO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a code explainer agent. Summarize what the following file does. Be concise but informative.\n\nCode:\n {{ $json.sourceCode }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        920,
+        -20
+      ],
+      "id": "b2a24337-cf7b-4826-b417-d1463d8c6886",
+      "name": "Explain Each Code File Function",
+      "credentials": {
+        "openAiApi": {
+          "id": "K9lcYRM5A96ouQ0w",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "o3-mini",
+          "mode": "list",
+          "cachedResultName": "O3-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Given the following code summaries from a project, group them into topics and subtopics.\n\nFor each, return:\n- Topic (e.g., \"Authentication\")\n- Language used (e.g., \"TypeScript\")\n- Framework (if identifiable, e.g., \"Next.js\")\n- One or more subTopics:\n    - Name\n    - Description\n    - Difficulty level from 1–10, representing the depth of mastery required to understand how this concept is used in this project\n\nReturn a JSON array like:\n{\"data\":\n[\n  {\n    \"topic\": \"Authentication\",\n    \"language\": \"TypeScript\",\n    \"framework\": \"Next.js\",\n    \"subTopics\": [\n      {\n        \"subTopic\": \"JWT Authentication\",\n        \"description\": \"Handling user authentication via JSON Web Tokens with custom middleware.\",\n        \"level\": 7\n      }\n    ]\n  }\n]}\n\nCode Summaries:\n{{ $json.content }}\n"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1800,
+        0
+      ],
+      "id": "86381f68-bbbb-487a-ab01-36138f98aeed",
+      "name": "Seperate it into Topic, Difficulty, language, Framework and Subtopic",
+      "credentials": {
+        "openAiApi": {
+          "id": "K9lcYRM5A96ouQ0w",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "message.content.data",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2180,
+        0
+      ],
+      "id": "0cdab569-aab6-4773-9b23-b1d8b0728cc7",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "gitgrasp_schema",
+          "mode": "list",
+          "cachedResultName": "gitgrasp_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "Syllabus",
+          "mode": "list",
+          "cachedResultName": "Syllabus"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "createdAt": "2025-05-31T23:56:43",
+            "updatedAt": "2025-05-31T23:56:45",
+            "projectId": "={{ $json.body.projectId }}",
+            "_id": "={{ Math.random().toString(36)}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "_id",
+              "displayName": "_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updatedAt",
+              "displayName": "updatedAt",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "projectId",
+              "displayName": "projectId",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        340,
+        -20
+      ],
+      "id": "5fdf528e-672b-48f6-b7a2-ede61b44e4a7",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "VjESJEN8UuXK7gtx",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "['message.content.data'].subTopics",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2440,
+        0
+      ],
+      "id": "b990a347-beb8-4204-ba22-cddcee1ff295",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "message.content"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        0
+      ],
+      "id": "259ff037-565c-437b-9002-e355cf2a3f8b",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "gitgrasp_schema",
+          "mode": "list",
+          "cachedResultName": "gitgrasp_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "Topic",
+          "mode": "list",
+          "cachedResultName": "Topic"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "level": "={{ $json['[\\'message.content.data\\'].subTopics'].level }}",
+            "_id": "={{ Math.random().toString(36)}}",
+            "name": "={{ $json['message.content.data'].topic }}",
+            "description": "={{ $json['[\\'message.content.data\\'].subTopics'].description }}",
+            "updatedAt": "2025-06-01T03:57:37",
+            "createdAt": "2025-06-01T03:57:39",
+            "syllabusId": "={{ $('Postgres').item.json._id }}",
+            "framework": "={{ $json['message.content.data'].framework }}",
+            "language": "={{ $json['message.content.data'].language }}",
+            "subTopic": "={{ $json['[\\'message.content.data\\'].subTopics'].subTopic }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "_id",
+              "displayName": "_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "level",
+              "displayName": "level",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updatedAt",
+              "displayName": "updatedAt",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "syllabusId",
+              "displayName": "syllabusId",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "framework",
+              "displayName": "framework",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "subTopic",
+              "displayName": "subTopic",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        2660,
+        0
+      ],
+      "id": "0f1d4671-9262-44d0-b283-a03ef4d85d5f",
+      "name": "Postgres1",
+      "credentials": {
+        "postgres": {
+          "id": "VjESJEN8UuXK7gtx",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all Files from a Repo": {
+      "main": [
+        [
+          {
+            "node": "Explain Each Code File Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Explain Each Code File Function": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seperate it into Topic, Difficulty, language, Framework and Subtopic": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Get all Files from a Repo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Seperate it into Topic, Difficulty, language, Framework and Subtopic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "36033fd0-a25b-45db-b0c8-626a1c727123",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3ea3309fa20b7f3f323ca8f5d7472e74e7934f6f5b29e1bf57d9f03c0707feb5"
+  },
+  "id": "rIMEEBbDLwK9ORwo",
+  "tags": []
+}
