@@ -25,7 +25,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  @@schema("gitgrasp_schema")
+  @@schema("user_schema")
 
 }
 
@@ -47,7 +47,7 @@ model Account {
  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@schema("gitgrasp_schema")
+  @@schema("user_schema")
 
 }
 
@@ -66,7 +66,7 @@ model Session {
 
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@schema("gitgrasp_schema")
+  @@schema("user_schema")
 }
 
 model Verification {
@@ -78,7 +78,7 @@ model Verification {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
  
-  @@schema("gitgrasp_schema")
+  @@schema("user_schema")
 }
 
 model jwks {
@@ -88,7 +88,7 @@ model jwks {
 
   createdAt DateTime @default(now())
 
-  @@schema("gitgrasp_schema")
+  @@schema("user_schema")
 }
 
 model Connection {
@@ -106,5 +106,5 @@ model Connection {
 
   @@unique([userId, name])
 
-  @@schema("gitgrasp_schema")
+  @@schema("user_schema")
 }

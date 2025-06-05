@@ -9,7 +9,7 @@ model Syllabus {
     projectId     String  @unique
     project       GithubProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
      
-    @@schema("gitgrasp_schema")
+    @@schema("quiz_schema")
 }
 
 model Topic {
@@ -28,7 +28,7 @@ model Topic {
     syllabusId    String
     syllabus      Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
 
-    @@schema("gitgrasp_schema")
+    @@schema("quiz_schema")
 }
 
 model Quiz {
@@ -46,7 +46,7 @@ model Quiz {
     userId        String
     user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@schema("gitgrasp_schema")
+    @@schema("quiz_schema")
 }
 
 model QuizQuestion {
@@ -66,6 +66,6 @@ model QuizQuestion {
     quizId        String
     quiz          Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-    @@schema("gitgrasp_schema")
+    @@schema("quiz_schema")
     
 }

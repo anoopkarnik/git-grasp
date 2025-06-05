@@ -15,7 +15,7 @@ export async function askQuestion(question: string, projectId: string) {
     const result = await db.$queryRaw`
     Select "fileName", "summary", "sourceCode",
     1-("summaryEmbedding" <=> ${vectorQuery}::vector) as "similarity"
-    from "gitgrasp_schema"."SourceCodeEmbedding"
+    from "github_schema"."SourceCodeEmbedding"
     where  1-("summaryEmbedding" <=> ${vectorQuery}::vector) > 0.4
     and "projectId" = ${projectId}
     order by "similarity" desc

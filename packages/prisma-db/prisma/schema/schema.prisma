@@ -13,7 +13,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL_POSTGRES")
-  schemas = ["gitgrasp_schema"]
+  schemas = ["user_schema", "financial_schema","github_schema","quiz_schema"]
   extensions = [vector]
 }
 
