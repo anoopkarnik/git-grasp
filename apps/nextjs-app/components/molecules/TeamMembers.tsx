@@ -1,8 +1,8 @@
 "use client"
 
 import React, { useEffect } from 'react'
-import useProject from '../hooks/useProject'
-import { getTeamMembers } from '../actions/project'
+import useProject from '../../hooks/useProject'
+import { getTeamMembers } from '../../actions/project'
 
 const TeamMembers = () => {
     const {projectId } = useProject()

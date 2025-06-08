@@ -1,7 +1,7 @@
 "use client"
 
 import { SidebarProvider, SidebarTrigger } from "@repo/ui/organisms/shadcn/sidebar"
-import { AppSidebar } from "../../components/Sidebar"
+import { AppSidebar } from "../../components/organisms/Sidebar"
 import { sidebarFooterItems, sidebarItems } from "../../lib/constants/home"
 import { useSession} from "@repo/auth/better-auth/auth-client";
 import { RecoilRoot } from "recoil";

@@ -2,6 +2,7 @@
 import FAQ from '../../organisms/landing/FAQ/v1';
 import FeaturesV1 from '../../organisms/landing/Features/v1';
 import FeaturesV2 from '../../organisms/landing/Features/v2';
+import FeaturesV3 from '../../organisms/landing/Features/v3';
 import Footer from '../../organisms/landing/Footer/v1';
 import HeroV1 from '../../organisms/landing/Hero/v1';
 import HeroV2 from '../../organisms/landing/Hero/v2';
@@ -34,7 +35,8 @@ export const sectionRegistry = {
   },
   features: {
     v1: FeaturesV1,
-    v2: FeaturesV2
+    v2: FeaturesV2,
+    v3: FeaturesV3
   }
   // Add other sections like team, faq, pricing, etc.
 };

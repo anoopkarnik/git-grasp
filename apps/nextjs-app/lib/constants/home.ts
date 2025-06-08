@@ -4,12 +4,15 @@ import {  Home, BoxesIcon, CoinsIcon, ShieldQuestionIcon, SchoolIcon} from "luci
 export const sidebarItems:sidebarHeaderProps = 
 {
     "Application":[
-        {title: "Home", url: "/", icon: Home},
+        {title: "Dashboard", url: "/", icon: Home},
+        {title: "Topics", url: "/topics", icon: SchoolIcon},
+        {title: "Chat with Code", url: "/questions", icon: ShieldQuestionIcon},
+        {title: "Quizzes", url: "/quizzes", icon: SchoolIcon}
+    ],
+    "Account":[
         {title: "Connections", url: "/connections", icon: BoxesIcon},
         {title: "Billing", url: "/billing", icon: CoinsIcon},
-        {title: "Questions", url: "/questions", icon: ShieldQuestionIcon},
-        {title: "Quiz", url: "/quizzes", icon: SchoolIcon}
-    ],
+    ]
 }
 
 export const sidebarFooterItems:sidebarFooterItemsProps[] = 

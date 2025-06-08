@@ -1,5 +1,5 @@
 "use client"
-import {  BookIcon, LogIn } from "lucide-react";
+import {  ArrowBigRight, ArrowRight, BookIcon, CircleArrowRight, LogIn } from "lucide-react";
 import { Button } from "../../../atoms/shadcn/button";
 import { useEffect, useState } from "react";
 import { HeroSectionProps } from "@repo/ts-types/landing-page/hero";
@@ -77,10 +77,11 @@ const Hero = ({heroSection, features ,testimonials, pricingList,teamList,videoUr
                 <Button
                 className="flex items-center gap-2"
                   variant="default"
-                  size="lg"
+                  size="sm"
                   onClick={() => heroSection.getStartedLink && router.push(heroSection.getStartedLink)}
                 > 
-                Get Started
+                <p className="text-sm">Get Started</p>
+                <ArrowRight size={15} />
                 </Button>}
             </div>
           </div>

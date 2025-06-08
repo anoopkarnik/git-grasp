@@ -8,7 +8,7 @@ import { Separator } from '@repo/ui/atoms/shadcn/separator';
 import { Input } from '@repo/ui/atoms/shadcn/input';
 import { Button } from '@repo/ui/atoms/shadcn/button';
 import { useToast } from '@repo/ui/hooks/use-toast';
-import { createQuiz } from '../actions/syllabus';
+import { createQuiz } from '../../actions/syllabus';
 
 const formSchema = z.object({
     totalQuestions: z.number().min(1, {message: "Number of questions is required"}).max(20, {message: "Maximum number of questions is 20"}),

@@ -1,11 +1,12 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { getQuestions } from '../actions/syllabus';
+import { getQuestions } from '../../actions/syllabus';
 import { Button } from '@repo/ui/atoms/shadcn/button';
 import { Textarea } from '@repo/ui/atoms/shadcn/textarea';
-import { getMarks } from '../actions/openai';
+import { getMarks } from '../../actions/openai';
 import { cn } from '@repo/ui/lib/utils';
+import useConnections from '../../hooks/useConnections';
 
 const QuestionQuizCard = ({quizId}: {quizId:string}) => {
 
@@ -13,6 +14,7 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
     const [answers, setAnswers] = useState<string[]>([]);
     const [marksGiven, setMarksGiven] = useState<any[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const {connections} = useConnections();
 
     useEffect(() =>{
         const fetchQuestions = async () => {
@@ -29,7 +31,9 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
 
     const handleSubmit = async () => {
         setIsSubmitted(true);
-        const marks = await getMarks(questions, answers)
+        const openAiConnection = connections.find((connection) => connection.connection === 'OpenAI');
+        const apiKey = openAiConnection?.details ? JSON.parse(openAiConnection.details).apiKey : "";
+        const marks = await getMarks(questions, answers, apiKey);
         setMarksGiven(marks);
         setIsSubmitted(false);
     }

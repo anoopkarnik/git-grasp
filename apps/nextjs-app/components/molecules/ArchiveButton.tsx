@@ -1,9 +1,9 @@
 "use client"
 
 import React from 'react'
-import useProject from '../hooks/useProject'
+import useProject from '../../hooks/useProject'
 import { Button } from '@repo/ui/atoms/shadcn/button'
-import { archiveProject } from '../actions/project'
+import { archiveProject } from '../../actions/project'
 import { useToast } from '@repo/ui/hooks/use-toast'
 
 const ArchiveButton = () => {

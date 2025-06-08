@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import useProject from '../hooks/useProject'
+import useProject from '../../hooks/useProject'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@repo/ui/molecules/shadcn/dialog'
 import { Input } from '@repo/ui/atoms/shadcn/input'
 import { useToast } from '@repo/ui/hooks/use-toast'

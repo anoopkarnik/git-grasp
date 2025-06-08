@@ -1,5 +1,5 @@
 import React from 'react'
-import QuestionQuizCard from '../../../../components/QuestionQuizCard';
+import QuestionQuizCard from '../../../../components/organisms/QuestionQuizCard';
 
 type Props = {
     params: Promise<{quizId: string}>

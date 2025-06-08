@@ -70,7 +70,7 @@ export async function askQuestion(question: string, projectId: string) {
     }
 }
 
-export const getMarks = async (questions:QuizQuestion[], answers: string[] ) => {
+export const getMarks = async (questions:QuizQuestion[], answers: string[], openAiApiKey: string ) => {
     const results = [];
 
   for (let i = 0; i < questions.length; i++) {
@@ -100,7 +100,7 @@ export const getMarks = async (questions:QuizQuestion[], answers: string[] ) => 
         `;
 
         const response = await chatCompletion({
-            apiKey: process.env.OPENAI_API_KEY || '',
+            apiKey: openAiApiKey,
             model: 'gpt-4o',
             systemMessage: "You are a helpful AI assistant that provides feedback on quiz answers.",
             userMessages: [prompt],

@@ -15,15 +15,23 @@ export const getProjects = async () => {
         throw new Error("User not authenticated");
     }
     const projects = await db.githubProject.findMany({
-        where: {
+    where: {
+        deletedAt: null,
+        OR: [
+        {
             userToProjects: {
-                some: {
-                    userId: session.user.id,
-                },
+            some: {
+                userId: session.user.id,
             },
-            deletedAt: null,
+            },
         },
+        {
+            public: true,
+        },
+        ],
+    },
     });
+
 
     return projects;
 }

@@ -1,30 +1,20 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ExternalLink, GithubIcon } from 'lucide-react'
 import useProject from '../../hooks/useProject'
 import Link from 'next/link'
-import AskQuestionCard from '../../components/AskQuestionCard'
-import ArchiveButton from '../../components/ArchiveButton'
-import InviteButton from '../../components/InviteButton'
-import TeamMembers from '../../components/TeamMembers'
-import { getTopics } from '../../actions/syllabus'
-import TopicCard from '../../components/TopicCard'
+import ArchiveButton from '../../components/molecules/ArchiveButton'
+import InviteButton from '../../components/molecules/InviteButton'
+import TeamMembers from '../../components/molecules/TeamMembers'
+import GetStartedSteps from '../../components/organisms/GetStartedSteps'
+import { Badge } from '@repo/ui/atoms/shadcn/badge'
 
 const Dashboard = () => {
-    const {project,projectId} = useProject()
-    const [topics, setTopics] = useState<any[]>([])
-
-    useEffect(()=>{
-        const fetchTopics = async () => {
-            if(!projectId) return;
-            const topics = await getTopics(projectId)
-            setTopics(topics)
-        }
-        fetchTopics()
-    },[projectId])
+    const {project} = useProject()
 
   return (
-    <div className='mx-4'>        
+    <div className='mx-4'>    
+        <GetStartedSteps/>    
         {project && 
             <>
                 <div className='flex items-center justify-between flex-wrap gap-y-4 m-4 '>
@@ -42,22 +32,11 @@ const Dashboard = () => {
                     <div className='h-4'></div>
                     <div className='flex items-center gap-4'>
                         <TeamMembers/>
-                        <InviteButton/>
-                        <ArchiveButton/>
+                        {project.public && <Badge variant="default" >
+                            Public</Badge>}
+                        {!project.public &&<InviteButton/>}
+                        {!project.public && <ArchiveButton/>}
                     </div>                
-                </div>
-                <div className='grid grid-cols-5 w-full mx-2 my-10 gap-2s'>
-                    <AskQuestionCard/>
-                </div>
-                <div className='text-2xl font-semibold my-4 mx-8'>
-                    Topics
-                </div>
-                <div className='grid grid-cols-3  gap-4 mx-4 mb-10'>
-                    {topics?.map((topic) => (
-                        <TopicCard key={topic.id}
-                        topic={topic}
-                        />
-                    ))}
                 </div>
             </>
         }

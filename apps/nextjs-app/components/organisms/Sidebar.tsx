@@ -8,7 +8,7 @@ import { CompanyLogoName } from "@repo/ui/molecules/home/CompanyLogoName/v1";
 import SidebarItems from "@repo/ui/molecules/sidebar/SidebarItems/v1";
 import SidebarUser from "@repo/ui/molecules/sidebar/SidebarUser/v1";
 import type { GithubProject } from "@prisma/client";
-import useProject from "../hooks/useProject";
+import useProject from "../../hooks/useProject";
 import { Button } from "@repo/ui/atoms/shadcn/button";
 import { PlusIcon } from "lucide-react";
 import { Dialog, DialogContent } from "@repo/ui/molecules/shadcn/dialog";
@@ -61,7 +61,7 @@ export function AppSidebar({navbarSection,items,showCredits,projects}:Props) {
                 <Button variant={'default'} onClick={() => setOpen(true)}
                 className="flex items-center justify-center gap-2 max-w-[150px] ml-8 ">
                     <PlusIcon className="h-4 w-4" />
-                    Create Project
+                    Add a Repository
                 </Button>
             </SidebarContent>
 

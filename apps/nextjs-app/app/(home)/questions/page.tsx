@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import useProject from '../../../hooks/useProject'
 import { getQuestions } from '../../../actions/project'
 import AskQuestionCard from '../../../components/AskQuestionCard'
-import QuestionCard from '../../../components/QuestionCard'
+import QuestionCard from '../../../components/organisms/QuestionCard'
 
 const QAPage = () => {
   const [questions, setQuestions] = React.useState<any[]>([])

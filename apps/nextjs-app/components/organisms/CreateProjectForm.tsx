@@ -8,11 +8,25 @@ import { Separator } from '@repo/ui/atoms/shadcn/separator';
 import { Input } from '@repo/ui/atoms/shadcn/input';
 import { Button } from '@repo/ui/atoms/shadcn/button';
 import { useToast } from '@repo/ui/hooks/use-toast';
-import { checkCreditsAction, createProject } from '../actions/project';
-import useProject from '../hooks/useProject';
+import { checkCreditsAction, createProject } from '../../actions/project';
+import useProject from '../../hooks/useProject';
 import { Info } from 'lucide-react';
+import { MultiStepLoader } from '@repo/ui/organisms/aceternity/multi-step-loader';
+import { IconSquareRoundedX } from "@tabler/icons-react";
 
-
+const loadingStates = [
+  { text: "Initializing project"},
+    { text: "Connecting to Github"},
+    { text: "Fetching repository details"},
+    { text: "Creating project in database"},
+    { text: "Getting repository files"},
+    { text: "Processing & summarizing files"},
+    { text: "Adding files and their summaries to the project database"},
+    { text: "Creating embedding for these summaries and updating the database"},
+    { text: "Finalizing setup"},
+    { text: "Project setup complete"},
+    { text: "Ready to use your project"}
+];
 
 const formSchema = z.object({
     projectName: z.string().min(1, {message: "Project name is required"}),
@@ -31,6 +45,8 @@ const CreateProjectForm = () => {
         }
     })
     const { setProjectId,refreshProjects } = useProject()
+
+    const [loadingRepository, setLoadingRepository] = React.useState(false)
 
     const isLoading = form.formState.isSubmitting
 
@@ -162,12 +178,22 @@ const CreateProjectForm = () => {
                     {!checkCredits && <Button size='lg'  disabled={isLoading} >
                         Check Credits Cost
                     </Button>}
-                    {!!checkCredits && <Button size='lg' disabled={isLoading || !checkCredits || (checkCredits?.userCredits < checkCredits?.fileCount)} >
+                    {!!checkCredits && <Button size='lg' disabled={isLoading || !checkCredits || (checkCredits?.userCredits < checkCredits?.fileCount)} 
+                       onClick={()=> setLoadingRepository(true)} >
                         Connect Your Github Repository
                     </Button>}
                 </div>
             </form>
         </Form>
+        <MultiStepLoader loadingStates={loadingStates} loading={loadingRepository} duration={2000} />
+         {loadingRepository && (
+        <button
+          className="fixed top-4 right-4 z-[120]"
+          onClick={() => setLoadingRepository(false)}
+        >
+          <IconSquareRoundedX className="h-10 w-10" />
+        </button>
+      )}
     </div>
   )
 }

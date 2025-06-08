@@ -1,15 +1,15 @@
 "use client"
 import React from 'react'
-import useProject from '../hooks/useProject'
+import useProject from '../../hooks/useProject'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/molecules/shadcn/card'
 import { Textarea } from '@repo/ui/atoms/shadcn/textarea'
 import { Button } from '@repo/ui/atoms/shadcn/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@repo/ui/molecules/shadcn/dialog'
-import { askQuestion } from '../actions/openai'
+import { askQuestion } from '../../actions/openai'
 import { readStreamableValue } from 'ai/rsc'
 import MDEditor from "@uiw/react-md-editor"
 import CodeReferences from './CodeReferences'
-import { saveAnswer } from '../actions/project'
+import { saveAnswer } from '../../actions/project'
 import { useToast } from '@repo/ui/hooks/use-toast'
 
 interface FileReference {
