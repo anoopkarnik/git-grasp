@@ -28,7 +28,7 @@ export function AppSidebar({navbarSection,items,showCredits,projects}:Props) {
     
     return (
         <>
-        <Sidebar>
+        <Sidebar >
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -38,9 +38,10 @@ export function AppSidebar({navbarSection,items,showCredits,projects}:Props) {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-            <SidebarItems items={items}/>
+
             <SidebarContent>
-                <SidebarGroup>
+                <SidebarItems items={items}/>
+                <SidebarGroup className="mb-4">
                     <SidebarGroupLabel>Projects</SidebarGroupLabel>
                     <SidebarMenu>
                         {projects?.map((project) => (
@@ -56,13 +57,12 @@ export function AppSidebar({navbarSection,items,showCredits,projects}:Props) {
                             </SidebarMenuItem>
                         ))}
                     </SidebarMenu>
+                     <Button variant={'default'} onClick={() => setOpen(true)}
+                    className="flex items-center justify-center gap-2 max-w-[150px] ml-8 mt-6">
+                        <PlusIcon className="h-4 w-4" />
+                        Add a Repository
+                    </Button>
                 </SidebarGroup>
-                
-                <Button variant={'default'} onClick={() => setOpen(true)}
-                className="flex items-center justify-center gap-2 max-w-[150px] ml-8 ">
-                    <PlusIcon className="h-4 w-4" />
-                    Add a Repository
-                </Button>
             </SidebarContent>
 
             {/* <SidebarFooterItems footerItems={footerItems}/> */}

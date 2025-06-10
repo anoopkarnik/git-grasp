@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import useProject from '../../../hooks/useProject'
 import { getQuestions } from '../../../actions/project'
-import AskQuestionCard from '../../../components/AskQuestionCard'
+import AskQuestionCard from '../../../components/organisms/AskQuestionCard'
 import QuestionCard from '../../../components/organisms/QuestionCard'
 
 const QAPage = () => {

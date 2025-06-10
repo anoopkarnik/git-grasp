@@ -61,6 +61,7 @@ export const createProject = async ({githubUrl, name, githubToken}:{githubUrl:st
     });
 
     await indexGithubRepo(project.id, githubUrl, githubToken);
+    // await pollCommits(project.id)
     await db.user.update({
         where: {
             id: session.user.id,
@@ -174,3 +175,4 @@ export const checkCreditsAction = async (githubUrl:string, githubToken?: string)
     }
     return {fileCount, userCredits: session.user.creditsTotal - session.user.creditsUsed || 0};
 }
+

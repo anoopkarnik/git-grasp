@@ -5,6 +5,13 @@ import { auth } from "@repo/auth/better-auth/auth";
 import { headers } from "next/headers";
 import axios from "axios";
 
+export const createSyllabus = async (projectId: string) => {
+    axios.post(`${process.env.GENERATE_SYLLABUS_N8N_WEBHOOK_URL}`, {
+        projectId
+    })
+}
+
+
 export const getTopics = async (projectId:string) => {
 
     const syllabus = await db.syllabus.findUnique({

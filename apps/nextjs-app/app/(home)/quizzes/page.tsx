@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { getQuizzes } from '../../../actions/syllabus'
-import QuizCard from '../../../components/QuizCard'
+import QuizCard from '../../../components/organisms/QuizCard'
 import type { Quiz,Topic, QuizQuestion } from '@prisma/client'
 import useProject from '../../../hooks/useProject'
 

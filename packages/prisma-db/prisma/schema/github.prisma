@@ -12,6 +12,7 @@ model GithubProject {
     sourceCodeEmbeddings SourceCodeEmbedding[]
     savedQuestions     Question[]
     syllabus           Syllabus?
+    commits        GithubCommit[]
 
     @@schema("github_schema")
 }
@@ -66,4 +67,22 @@ model SourceCodeEmbedding {
 
     @@schema("github_schema")
 
+}
+
+model GithubCommit {
+    id            String   @id @default(cuid()) @map("_id")
+    projectId     String
+    commitMessage String
+    commitHash    String
+    commitAuthorName String
+    commitAuthorAvatar String
+    commitDate DateTime
+    summary     String
+
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    project GithubProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    @@schema("github_schema")
 }
