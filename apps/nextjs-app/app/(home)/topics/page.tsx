@@ -1,28 +1,52 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import useProject from '../../../hooks/useProject'
-import { createSyllabus, getTopics } from '../../../actions/syllabus'
+import { createSyllabus } from '../../../actions/syllabus'
 import TopicCard from '../../../components/organisms/TopicCard'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@repo/ui/molecules/shadcn/accordion'
-import type { Topic } from '@prisma/client'
 import { Button } from '@repo/ui/atoms/shadcn/button'
+import useTopics from '../../../hooks/useTopics'
 
 const Dashboard = () => {
-    const {project,projectId} = useProject()
-    const [uniqueTopics, setUniqueTopics] = useState<string[]>([])
-    const [topics, setTopics] = useState<Topic[]>([])
+    const { project, projectId } = useProject();
+    const [agentRunning, setAgentRunning] = useState(false);
+    const [uniqueTopics, setUniqueTopics] = useState<string[]>([]);
+    const { data: topics = [], refetch } = useTopics(projectId ?? "", agentRunning);
 
-    useEffect(()=>{
-        const fetchTopics = async () => {
-            if(!projectId) return;
-            const topics = await getTopics(projectId)
-            setTopics(topics)
-            const topicNames = topics.map((topic: any) => topic.name)
-            const uniqueTopics = Array.from(new Set(topicNames))
-            setUniqueTopics(uniqueTopics)
+      // If topics appear, stop agentRunning
+    useEffect(() => {
+        if (agentRunning && topics.length > 0) {
+        setAgentRunning(false);
+        // Polling stops automatically because agentRunning is now false
         }
-        fetchTopics()
-    },[projectId])
+    }, [topics, agentRunning]);
+
+    // Update unique topics
+    useEffect(() => {
+        if (!topics || topics.length === 0) return;
+        const topicNames = topics.map((topic: any) => topic.name)
+        setUniqueTopics(Array.from(new Set(topicNames)));
+    }, [topics]);
+
+
+    useEffect(() => {
+        if (topics.length > 0 && agentRunning) {
+            setAgentRunning(false);
+            refetch({ cancelRefetch: true }); // stops polling if you want, or just set refetchInterval to 0
+        }
+    }, [topics, agentRunning, refetch]);
+
+   const createSyllabusAndTopics = async () => {
+    if (!projectId) return;
+    try {
+      setAgentRunning(true);
+      await createSyllabus(projectId);
+      // No need to refetch here; polling will handle updates
+    } catch (error) {
+      setAgentRunning(false);
+      console.error("Error creating syllabus and topics:", error);
+    }
+  };
 
   return (
     <div className='mx-4'>        
@@ -31,13 +55,19 @@ const Dashboard = () => {
                 <div className='text-2xl font-semibold my-4 mx-8'>
                     Topics
                 </div>
-                {topics.length==0 && <div className='flex flex-col items-center justify-center p-4 gap-6'>
+                {topics.length==0 && !agentRunning && <div className='flex flex-col items-center justify-center p-4 gap-6'>
                     <div className='text-description'>No topics generated yet.</div>
                     <Button 
-                        onClick={() => projectId && createSyllabus(projectId)} 
+                        onClick={createSyllabusAndTopics} 
                         disabled={!projectId}
                     >
                         Create Topics for this project
+                    </Button>
+                </div>}
+                {agentRunning && <div className='flex flex-col items-center justify-center p-4 gap-6'>
+                    <div className='text-description'>Generating topics... It may take 10-20 minutes</div>
+                    <Button disabled>
+                        Please wait...
                     </Button>
                 </div>}
                 <div className=' mx-8'>

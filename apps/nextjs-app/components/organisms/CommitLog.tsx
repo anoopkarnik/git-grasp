@@ -30,16 +30,12 @@ const CommitLog = () => {
       if (newCommits.length < PAGE_SIZE) setHasMore(false);
     };
     fetchCommits();
-  }, [projectId, page]);
+  }, [projectId, page, hasMore]);
 
       // Infinite scroll handler
     const handleScroll = useCallback(() => {
-        if (
-        !loading &&
-        hasMore &&
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 300
-        ) {
-        setPage((prevPage) => prevPage + 1);
+        if (!loading && hasMore && window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+            setPage((prevPage) => prevPage + 1);
         }
     }, [loading, hasMore]);
 

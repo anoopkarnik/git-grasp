@@ -176,3 +176,27 @@ export const checkCreditsAction = async (githubUrl:string, githubToken?: string)
     return {fileCount, userCredits: session.user.creditsTotal - session.user.creditsUsed || 0};
 }
 
+export const getDocumentations = async (projectId: string) => {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+    if (!session?.user?.id) {
+        throw new Error("User not authenticated");
+    }
+    const documents = await db.documentation.findMany({
+        where: {
+            projectId,
+        },
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
+    return documents;
+}
+
+
+export const createReadme = async (projectId: string) => {
+    axios.post(`${process.env.GENERATE_README_N8N_WEBHOOK_URL}`, {
+        projectId
+    })
+}

@@ -13,6 +13,7 @@ model GithubProject {
     savedQuestions     Question[]
     syllabus           Syllabus?
     commits        GithubCommit[]
+    documentation  Documentation[]
 
     @@schema("github_schema")
 }
@@ -83,6 +84,20 @@ model GithubCommit {
     updatedAt     DateTime @updatedAt
 
     project GithubProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    @@schema("github_schema")
+}
+
+model Documentation{
+    id            String   @id @default(cuid()) @map("_id")
+    type          String
+    content       String
+
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    projectId     String
+    project       GithubProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
     @@schema("github_schema")
 }
