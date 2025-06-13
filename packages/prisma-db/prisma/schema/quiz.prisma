@@ -16,7 +16,7 @@ model Topic {
     id            String   @id @default(cuid()) @map("_id")
     name          String
     description   String
-    quizzes       Quiz[]
+    questions      QuizQuestion[]
     level         Int
     subTopic      String
     language      String
@@ -40,9 +40,6 @@ model Quiz {
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
-    topicId       String
-    topic         Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
-
     userId        String
     user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -54,7 +51,11 @@ model QuizQuestion {
     question      String
     answer        String
 
-    type          String               @default("subjective") // text, multiple-choice, true/false
+    type          String               @default("subjective") // subjective, multiple-choice, true/false
+    options       String[]             @default([]) // for multiple-choice questions
+
+    topicId       String
+    topic         Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
 
     chosenAnswer  String?
     score         Int?

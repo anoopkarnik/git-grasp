@@ -5,11 +5,11 @@ import QuizCard from '../../../components/organisms/QuizCard'
 import type { Quiz,Topic, QuizQuestion } from '@prisma/client'
 import useProject from '../../../hooks/useProject'
 
-type Props = Quiz & {
-    topic: Topic
-    questions: QuizQuestion[]
-}
+type QuizQuestionWithTopic = QuizQuestion & { topic: Topic }
 
+type Props = Quiz & {
+    questions: QuizQuestionWithTopic[]
+}
 const Quizzes = () => {
     const [quizzes, setQuizzes] = useState<Props[]>([])
     const { projectId } = useProject()

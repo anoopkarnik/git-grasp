@@ -29,13 +29,13 @@ const TopicCard = ({topic}:{topic:Topic}) => {
                 size={'sm'}
                 onClick={() => setOpen(true)}
             >
-                Start Quiz
+                Generate Quiz
             </Button>
         </div>
         
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
-                <CreateQuizForm topicId={topic.id}/>
+                <CreateQuizForm topicIds={[topic.id]}/>
             </DialogContent>
         </Dialog>
 

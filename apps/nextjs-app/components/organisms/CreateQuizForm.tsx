@@ -9,17 +9,20 @@ import { Input } from '@repo/ui/atoms/shadcn/input';
 import { Button } from '@repo/ui/atoms/shadcn/button';
 import { useToast } from '@repo/ui/hooks/use-toast';
 import { createQuiz } from '../../actions/syllabus';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/molecules/shadcn/select';
 
 const formSchema = z.object({
     totalQuestions: z.number().min(1, {message: "Number of questions is required"}).max(20, {message: "Maximum number of questions is 20"}),
+    type: z.enum(["subjective","multiple_choice","true/false"], )
 })
 
-const CreateQuizForm = ({topicId}:{topicId:string}) => {
+const CreateQuizForm = ({topicIds}:{topicIds:string[]}) => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            totalQuestions: 1
+            totalQuestions: 1,
+            type: "subjective"
         }
     })
 
@@ -31,7 +34,7 @@ const CreateQuizForm = ({topicId}:{topicId:string}) => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try{
-            await createQuiz(topicId, values.totalQuestions)
+            await createQuiz(topicIds, values.totalQuestions, values.type)
             
             toast({
                 title: "Quiz is being generated. Please wait...",
@@ -61,7 +64,7 @@ const CreateQuizForm = ({topicId}:{topicId:string}) => {
                             Generate Quiz
                         </h3>
                         <p className='text-description'>
-                            Generate a quiz with a specified number of questions. 
+                            Generate a quiz with a specified number of questions per subtopic. 
                         </p>
                     </div>
                     <Separator className='bg-primary/10' />
@@ -76,7 +79,7 @@ const CreateQuizForm = ({topicId}:{topicId:string}) => {
                                     <Input
                                         type="number"
                                         disabled={isLoading}
-                                        placeholder="Total Questions"
+                                        placeholder="Total Questions per Subtopic"
                                         {...field}
                                         onChange={(e) => field.onChange(Number(e.target.value))}
                                         />
@@ -85,7 +88,27 @@ const CreateQuizForm = ({topicId}:{topicId:string}) => {
                             </FormItem>
                         )}
                     />
-                    
+                    <FormField
+                        name='type'
+                        control={form.control}
+                        render={({field}) => (
+                            <FormItem className='col-span-2 md:col-span-1'>
+                                 <FormControl>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <SelectTrigger className='w-full'>
+                                            <SelectValue placeholder="Select Quiz Type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="subjective">Subjective</SelectItem>
+                                            <SelectItem value="multiple_choice">Multiple Choice</SelectItem>
+                                            <SelectItem value="true/false">True/False</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                 </FormControl>
+                                 <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
                 </div>
                 
                 <div className='w-full flex justify-center gap-4'>

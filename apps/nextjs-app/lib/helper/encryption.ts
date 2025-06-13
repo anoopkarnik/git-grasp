@@ -22,7 +22,7 @@ export const symmetricEncrypt = (data:string) =>{
     return iv.toString('hex') + ':' + tag.toString('hex') + ':' + encrypted;
 }
 
-export const symmetricDecrypt = (encrypted:string) =>{
+export const symmetricDecrypt = async (encrypted:string) =>{
     const key = process.env.ENCRYPTION_KEY;
     if (!key) {
         throw new Error("ENCRYPTION_KEY not found");

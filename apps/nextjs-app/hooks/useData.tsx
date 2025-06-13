@@ -33,7 +33,6 @@ export const useData = () => {
       const source = process.env.NEXT_PUBLIC_CMS_SOURCE;
 
     if (source === "strapi") {
-      console.log("Fetching data from Strapi CMS");
       // If the source is Strapi, fetch data from Strapi CMS
       updateDataFromStrapiCms();
     } else {

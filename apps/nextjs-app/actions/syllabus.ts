@@ -28,9 +28,9 @@ export const getTopics = async (projectId:string) => {
             syllabusId: syllabus.id
         },
         include: {
-            quizzes: {
+            questions: {
                 include: {
-                    questions: true
+                    quiz: true
                 }
             }
         },
@@ -41,27 +41,29 @@ export const getTopics = async (projectId:string) => {
     return topics;
 }
 
-export const createQuiz = async (topicId: string, totalQuestions: number) => {
+export const createQuiz = async (topicIds: string[], totalQuestions: number, type: string) => {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
     if (!session?.user?.id) {
         throw new Error("User not authenticated");
     }
+
     const quiz = await db.quiz.create({
         data: {
-            topicId,
             totalQuestions,
             userId: session.user.id
         }
     });
+
     axios.post(`${process.env.GENERATE_QUIZ_N8N_WEBHOOK_URL}`, {
-        topicId,
+        topicIds,
         totalQuestions,
+        type,
         quizId: quiz.id
     })
-
     return quiz;
+
 }
 
 export const getQuizzes = async (projectId: string) => {
@@ -74,18 +76,25 @@ export const getQuizzes = async (projectId: string) => {
     const quizzes = await db.quiz.findMany({
         where: {
             userId: session.user.id,
-            topic: {
-                syllabus: {
-                    projectId
+            questions: {
+                some: {
+                    topic: {
+                        syllabus: {
+                            projectId
+                        }
+                    }
                 }
             }
         },
         include: {
-            topic: true,
-            questions: true
+            questions: {
+                include: {
+                    topic: true
+                }
+            }
         },
         orderBy: {
-            createdAt: "desc"
+            createdAt: "asc"
         }
     });
     return quizzes;
@@ -102,4 +111,3 @@ export const getQuestions= async (quizId: string) => {
     });
     return questions;
 }
-

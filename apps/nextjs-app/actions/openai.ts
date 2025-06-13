@@ -5,6 +5,10 @@ import { chatCompletion, generateEmbedding } from "@repo/ai/openai/base";
 import db from "@repo/prisma-db/client";
 import { openai } from '@ai-sdk/openai';
 import type { QuizQuestion } from "@prisma/client"
+import { auth } from "@repo/auth/better-auth/auth";
+import { headers } from "next/headers";
+import { symmetricDecrypt } from "../lib/helper/encryption";
+
 
 
 export async function askQuestion(question: string, projectId: string) {
@@ -20,7 +24,6 @@ export async function askQuestion(question: string, projectId: string) {
     and "projectId" = ${projectId}
     order by "similarity" desc
     limit 10` as {fileName: string, summary: string, sourceCode: string, similarity: number}[];
-    console.log('query result', result)
     let context = ''
 
     for (const doc of result) {
@@ -70,62 +73,84 @@ export async function askQuestion(question: string, projectId: string) {
     }
 }
 
-export const getMarks = async (questions:QuizQuestion[], answers: string[], openAiApiKey: string ) => {
+export const getMarks = async (questions:QuizQuestion[], answers: string[] ) => {
     const results = [];
-
-  for (let i = 0; i < questions.length; i++) {
-        // MCQ/Objective auto check
-        if (answers[i] && answers[i] === questions[i]?.answer) {
-        results.push({
-            score: questions[i]?.scoreMax,
-            comment: "Perfect! Your answer is correct."
-        });
-        continue;
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+    if (!session?.user?.id) {
+        throw new Error("User not authenticated");
+    }
+    const connections = await db.connection.findMany({
+        where: {
+            userId: session.user.id,
+            connection: 'OpenAI'
+        },
+        orderBy: {
+            createdAt: "desc"
         }
-
-        // Use OpenAI for subjective/other cases
-        const prompt = `
-                Question: ${questions[i]?.question}
-                Correct Answer: ${questions[i]?.answer}
-                User Answer: ${answers[i]}
-
-                Score out of ${questions[i]?.scoreMax} (if mostly correct, partial marks are ok): 
-                Comment: (Brief, helpful feedback, even if correct. Max 2 sentences.)
-
-                Respond only in JSON: 
-                {
-                "score": number,
-                "comment": "string"
-                }
-        `;
-
-        const response = await chatCompletion({
-            apiKey: openAiApiKey,
-            model: 'gpt-4o',
-            systemMessage: "You are a helpful AI assistant that provides feedback on quiz answers.",
-            userMessages: [prompt],
-            temperature: 0.2
-        })
-
-        // Parse JSON from OpenAI's response
-        const match = response.choices?.[0]?.message?.content?.match(/\{[^}]+\}/s);
-        let aiResult = { score: 0, comment: "No feedback generated." };
-        if (match && match[0]) {
-        try {
-            aiResult = JSON.parse(match[0]);
-        } catch (e) {
-            // fallback: use text directly
-            aiResult = { score: 0, comment: response.choices?.[0]?.message?.content?.trim() ?? "No feedback generated." };
-        }
-        }
-
-        results.push(aiResult);
-        await db.quizQuestion.update({
-            where: { id: questions[i]?.id },
-            data: {
-                score: aiResult.score
+    });
+    if (!connections || connections.length === 0) {
+        throw new Error("No OpenAI connection found. Please connect your OpenAI account.");
+    }
+    const apiKey = connections[0]?.details ? JSON.parse(connections[0].details).apiKey : undefined;
+    if (!apiKey) {
+        throw new Error("API key not found in connection details.");
+    }
+    const decryptedApiKey = await symmetricDecrypt(apiKey)
+    for (let i = 0; i < questions.length; i++) {
+            // MCQ/Objective auto check
+            if (answers[i] && answers[i] === questions[i]?.answer) {
+            results.push({
+                score: questions[i]?.scoreMax,
+                comment: "Perfect! Your answer is correct."
+            });
+            continue;
             }
-        })
+
+            // Use OpenAI for subjective/other cases
+            const prompt = `
+                    Question: ${questions[i]?.question}
+                    Correct Answer: ${questions[i]?.answer}
+                    User Answer: ${answers[i]}
+
+                    Score out of ${questions[i]?.scoreMax} (if mostly correct, partial marks are ok): 
+                    Comment: (Brief, helpful feedback, even if correct. Max 2 sentences.)
+
+                    Respond only in JSON: 
+                    {
+                    "score": number,
+                    "comment": "string"
+                    }
+            `;
+
+            const response = await chatCompletion({
+                apiKey: decryptedApiKey,
+                model: 'gpt-4o',
+                systemMessage: "You are a helpful AI assistant that provides feedback on quiz answers.",
+                userMessages: [prompt],
+                temperature: 0.2
+            })
+
+            // Parse JSON from OpenAI's response
+            const match = response.choices?.[0]?.message?.content?.match(/\{[^}]+\}/s);
+            let aiResult = { score: 0, comment: "No feedback generated." };
+            if (match && match[0]) {
+            try {
+                aiResult = JSON.parse(match[0]);
+            } catch (e) {
+                // fallback: use text directly
+                aiResult = { score: 0, comment: response.choices?.[0]?.message?.content?.trim() ?? "No feedback generated." };
+            }
+            }
+
+            results.push(aiResult);
+            await db.quizQuestion.update({
+                where: { id: questions[i]?.id },
+                data: {
+                    score: aiResult.score
+                }
+            })
   }
 
   return results; // [{ score, comment }, ...] for each question

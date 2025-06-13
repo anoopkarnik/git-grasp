@@ -6,7 +6,6 @@ import { Button } from '@repo/ui/atoms/shadcn/button';
 import { Textarea } from '@repo/ui/atoms/shadcn/textarea';
 import { getMarks } from '../../actions/openai';
 import { cn } from '@repo/ui/lib/utils';
-import useConnections from '../../hooks/useConnections';
 
 const QuestionQuizCard = ({quizId}: {quizId:string}) => {
 
@@ -14,7 +13,6 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
     const [answers, setAnswers] = useState<string[]>([]);
     const [marksGiven, setMarksGiven] = useState<any[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const {connections} = useConnections();
 
     useEffect(() =>{
         const fetchQuestions = async () => {
@@ -31,9 +29,8 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
 
     const handleSubmit = async () => {
         setIsSubmitted(true);
-        const openAiConnection = connections.find((connection) => connection.connection === 'OpenAI');
-        const apiKey = openAiConnection?.details ? JSON.parse(openAiConnection.details).apiKey : "";
-        const marks = await getMarks(questions, answers, apiKey);
+
+        const marks = await getMarks(questions, answers);
         setMarksGiven(marks);
         setIsSubmitted(false);
     }
@@ -54,7 +51,7 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
                     </p>
                 </div>
                 <div className=''>
-                    {question?.type !== 'MCQ' && 
+                    {question?.type == 'subjective' && 
                     <Textarea
                         value={answers[index] || ""}
                         onChange={(e) => {
@@ -65,6 +62,27 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
                         placeholder="Type your answer here..."
                         className="w-[60vw] min-h-[150px]"
                     />}
+                    {question?.type == 'multiple_choice' && (
+                        <div className='flex flex-col gap-2'>
+                            {question.options?.map((option: string, optionIndex: number) => (
+                                <label key={optionIndex} className='flex items-center gap-2'>
+                                    <input
+                                        type="radio"
+                                        name={`question-${index}`}
+                                        value={option}
+                                        checked={answers[index] === option}
+                                        onChange={() => {
+                                            const newAnswers = [...answers];
+                                            newAnswers[index] = option;
+                                            setAnswers(newAnswers);
+                                        }}
+                                    />
+                                    {option}
+                                </label>
+                            ))}
+                        </div>
+                    )
+                     }
                 </div>
                 <div> 
                     {marksGiven[index] && (
