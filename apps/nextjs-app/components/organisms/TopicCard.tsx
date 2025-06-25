@@ -29,7 +29,7 @@ const TopicCard = ({topic}:{topic:Topic}) => {
                 size={'sm'}
                 onClick={() => setOpen(true)}
             >
-                Generate Quiz
+                Generate 
             </Button>
         </div>
         

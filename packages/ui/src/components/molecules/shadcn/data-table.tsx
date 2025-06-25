@@ -38,8 +38,8 @@ import { EditIcon, Trash } from "lucide-react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onDelete: (rows: Row<TData>[]) => void;
-  onEdit: (rows: Row<TData>[]) => void;
+  onDelete?: (rows: Row<TData>[]) => void;
+  onEdit?: (rows: Row<TData>[]) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -89,7 +89,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <div className="flex items-center gap-4">
-        {table.getFilteredSelectedRowModel().rows.length == 1 && (
+        {onEdit && table.getFilteredSelectedRowModel().rows.length == 1 && (
           <Button
             variant="outline"
             className="ml-auto"
@@ -102,7 +102,7 @@ export function DataTable<TData, TValue>({
             Edit ({table.getFilteredSelectedRowModel().rows.length})
           </Button>
         )}
-        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        {onDelete && table.getFilteredSelectedRowModel().rows.length > 0 && (
           <Button
             variant="outline"
             className="ml-auto"

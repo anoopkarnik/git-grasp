@@ -16,7 +16,7 @@ model Topic {
     id            String   @id @default(cuid()) @map("_id")
     name          String
     description   String
-    questions      QuizQuestion[]
+    questions     QuizQuestion[]
     level         Int
     subTopic      String
     language      String
@@ -30,6 +30,7 @@ model Topic {
 
     @@schema("quiz_schema")
 }
+
 
 model Quiz {
     id            String   @id @default(cuid()) @map("_id")
@@ -69,4 +70,20 @@ model QuizQuestion {
 
     @@schema("quiz_schema")
     
+}
+
+model SelfAssessment {
+  id           String   @id @default(cuid())
+
+  entityName   String   // Could be topicName, frameworkName, or languageName
+  entityType   String   // 'topic' | 'framework' | 'language'
+  level        Int      // Self-assessment level (e.g. 1-10)
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, entityName, entityType])
+  @@schema("quiz_schema")
 }

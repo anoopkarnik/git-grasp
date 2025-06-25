@@ -15,12 +15,13 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  connections   Connection[]
-  userToProjects UserToGithubProject[]
-  questionsAsked    Question[]
+  connections        Connection[]
+  userToProjects     UserToGithubProject[]
+  questionsAsked     Question[]
   quizzesTaken       Quiz[]
+  selfAssessment     SelfAssessment[]
 
-  password      String?
+  password           String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
