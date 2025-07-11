@@ -200,3 +200,11 @@ export const createReadme = async (projectId: string) => {
         projectId
     })
 }
+
+export const summariseCodeN8N = async (code: string) => {
+    const summary:string = await axios.post(`${process.env.SUMMARIZE_CODE_N8N_WEBHOOK_URL}`, {
+        code
+    })
+    console.log("Summary from N8N:", summary);
+    return summary;
+}

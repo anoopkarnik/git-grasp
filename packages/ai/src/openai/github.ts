@@ -47,25 +47,23 @@ export async function summariseCode(doc: Document,type:string="OpenAI") {
   try {
     const code = doc.pageContent.slice(0, 10000);
     const systemPrompt = `
-      You are a senior software engineer onboarding a junior developer. You explain files in a simple and clear way.`;
+      You are a code explainer agent. Summarize what the following file does. Be concise but informative.`;
     const userPrompt =  `
       You're explaining the purpose of the file: ${doc.metadata.source}
 
       Here is the code:
       ---
       ${code}
-      ---
-      Please summarize its purpose in less than 100 words.`
+      ---`
 
     ;
     const apiKey = await getApiKeyFromType(type);
 
     const response = await chatCompletion({
       apiKey: apiKey,
-      model: 'gpt-3.5-turbo-0125',
+      model: 'gpt-4o-mini',
       systemMessage: systemPrompt,
-      userMessages: [userPrompt],
-      temperature: 0.4,
+      userMessages: [userPrompt]
    })
 
 

@@ -13,32 +13,35 @@ export const createSyllabus = async (projectId: string) => {
 
 
 export const getTopics = async (projectId:string) => {
-
-    const syllabus = await db.syllabus.findUnique({
-        where: {
-            projectId
-        },
-    });
-    if (!syllabus) {
-        return [];
-    }
-
-    const topics = await db.topic.findMany({
-        where: {
-            syllabusId: syllabus.id
-        },
-        include: {
-            questions: {
-                include: {
-                    quiz: true
-                }
-            }
-        },
-        orderBy: {
-            createdAt: "asc"
+    try {
+        const syllabus = await db.syllabus.findUnique({
+            where: {
+                projectId
+            },
+        });
+        if (!syllabus) {
+            return [];
         }
-    });
-    return topics;
+
+        const topics = await db.topic.findMany({
+            where: {
+                syllabusId: syllabus.id
+            },
+            include: {
+                questions: {
+                    include: {
+                        quiz: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: "asc"
+            }
+        });
+        return topics;
+    } catch (error) {
+        return []
+    }
 }
 
 export const createQuiz = async (topicIds: string[], totalQuestions: number, type: string) => {

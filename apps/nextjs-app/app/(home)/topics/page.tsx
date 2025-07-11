@@ -12,7 +12,14 @@ import ByFrameworksTab from '../../../components/organisms/ByFrameworksTab'
 const Dashboard = () => {
     const { project, projectId } = useProject();
     const [agentRunning, setAgentRunning] = useState(false);
-    const { data: topics = [], refetch } = useTopics(projectId ?? "", agentRunning);
+    const { data: topics = [], refetch, isLoading } = useTopics(projectId ?? "", agentRunning);
+
+    const [prevProjectId, setPrevProjectId] = useState(projectId);
+    useEffect(() => {
+    if (projectId !== prevProjectId) {
+        setPrevProjectId(projectId);
+    }
+    }, [projectId]);
 
 
       // If topics appear, stop agentRunning
@@ -29,7 +36,7 @@ const Dashboard = () => {
             setAgentRunning(false);
             refetch({ cancelRefetch: true }); // stops polling if you want, or just set refetchInterval to 0
         }
-    }, [topics, agentRunning, refetch]);
+    }, [topics, agentRunning, refetch, projectId]);
 
    const createSyllabusAndTopics = async () => {
     if (!projectId) return;
@@ -42,6 +49,7 @@ const Dashboard = () => {
       console.error("Error creating syllabus and topics:", error);
     }
   };
+
 
   return (
     <>
@@ -74,9 +82,15 @@ const Dashboard = () => {
                             Please wait...
                         </Button>
                     </div>}
-                    <TabsContent value="byTopics">
-                        <ByTopicsTab />
-                    </TabsContent>
+                    {(isLoading || projectId !== prevProjectId) ? (
+                        <div>Loading topics...</div>
+                        ) : topics.length === 0 ? (
+                        <div></div>
+                        ) : (
+                        <TabsContent value="byTopics">
+                            <ByTopicsTab />
+                        </TabsContent>
+                        )}
                     <TabsContent value="byLanguages">
                         <ByLanguagesTab />
                     </TabsContent>

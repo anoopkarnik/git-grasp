@@ -5,7 +5,6 @@ model Syllabus {
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
-
     projectId     String  @unique
     project       GithubProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
      

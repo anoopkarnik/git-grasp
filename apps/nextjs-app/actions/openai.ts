@@ -100,13 +100,6 @@ export const getMarks = async (questions:QuizQuestion[], answers: string[] ) => 
     const decryptedApiKey = await symmetricDecrypt(apiKey)
     for (let i = 0; i < questions.length; i++) {
             // MCQ/Objective auto check
-            if (answers[i] && answers[i] === questions[i]?.answer) {
-            results.push({
-                score: questions[i]?.scoreMax,
-                comment: "Perfect! Your answer is correct."
-            });
-            continue;
-            }
 
             // Use OpenAI for subjective/other cases
             const prompt = `
@@ -148,7 +141,8 @@ export const getMarks = async (questions:QuizQuestion[], answers: string[] ) => 
             await db.quizQuestion.update({
                 where: { id: questions[i]?.id },
                 data: {
-                    score: aiResult.score
+                    score: aiResult.score,
+                    chosenAnswer: answers[i],
                 }
             })
   }

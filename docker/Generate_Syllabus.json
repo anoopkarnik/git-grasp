@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        80,
-        -20
+        0,
+        0
       ],
-      "id": "8781c20d-e4e8-4904-9b0c-a2abf2bf44e8",
+      "id": "ed9142e5-f9a0-40dd-85d2-c12c08845266",
       "name": "Webhook",
       "webhookId": "c0a889f3-3256-4a75-a4b6-067413917ee3"
     },
@@ -22,9 +22,9 @@
         "operation": "select",
         "schema": {
           "__rl": true,
-          "value": "gitgrasp_schema",
+          "value": "github_schema",
           "mode": "list",
-          "cachedResultName": "gitgrasp_schema"
+          "cachedResultName": "github_schema"
         },
         "table": {
           "__rl": true,
@@ -46,193 +46,47 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        640,
-        -20
+        440,
+        0
       ],
-      "id": "ae5b51ae-9557-48ae-9cdb-64e625188e63",
+      "id": "ec2c503d-c406-4e6d-b0d0-1228abf3b675",
       "name": "Get all Files from a Repo",
       "alwaysOutputData": false,
       "credentials": {
         "postgres": {
-          "id": "VjESJEN8UuXK7gtx",
-          "name": "Postgres account"
+          "id": "KkozY7WBDq2aMUhk",
+          "name": "Gitgrasp Cloud Database"
         }
       }
     },
     {
       "parameters": {
-        "modelId": {
-          "__rl": true,
-          "value": "gpt-4.1-nano",
-          "mode": "list",
-          "cachedResultName": "GPT-4.1-NANO"
-        },
-        "messages": {
-          "values": [
-            {
-              "content": "=You are a code explainer agent. Summarize what the following file does. Be concise but informative.\n\nCode:\n {{ $json.sourceCode }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.openAi",
-      "typeVersion": 1.8,
-      "position": [
-        920,
-        -20
-      ],
-      "id": "b2a24337-cf7b-4826-b417-d1463d8c6886",
-      "name": "Explain Each Code File Function",
-      "credentials": {
-        "openAiApi": {
-          "id": "K9lcYRM5A96ouQ0w",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelId": {
-          "__rl": true,
-          "value": "o3-mini",
-          "mode": "list",
-          "cachedResultName": "O3-MINI"
-        },
-        "messages": {
-          "values": [
-            {
-              "content": "=Given the following code summaries from a project, group them into topics and subtopics.\n\nFor each, return:\n- Topic (e.g., \"Authentication\")\n- Language used (e.g., \"TypeScript\")\n- Framework (if identifiable, e.g., \"Next.js\")\n- One or more subTopics:\n    - Name\n    - Description\n    - Difficulty level from 1–10, representing the depth of mastery required to understand how this concept is used in this project\n\nReturn a JSON array like:\n{\"data\":\n[\n  {\n    \"topic\": \"Authentication\",\n    \"language\": \"TypeScript\",\n    \"framework\": \"Next.js\",\n    \"subTopics\": [\n      {\n        \"subTopic\": \"JWT Authentication\",\n        \"description\": \"Handling user authentication via JSON Web Tokens with custom middleware.\",\n        \"level\": 7\n      }\n    ]\n  }\n]}\n\nCode Summaries:\n{{ $json.content }}\n"
-            }
-          ]
-        },
-        "jsonOutput": true,
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.openAi",
-      "typeVersion": 1.8,
-      "position": [
-        1800,
-        0
-      ],
-      "id": "86381f68-bbbb-487a-ab01-36138f98aeed",
-      "name": "Seperate it into Topic, Difficulty, language, Framework and Subtopic",
-      "credentials": {
-        "openAiApi": {
-          "id": "K9lcYRM5A96ouQ0w",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "message.content.data",
+        "fieldToSplitOut": "output.data",
         "include": "allOtherFields",
         "options": {}
       },
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        2180,
+        1632,
         0
       ],
-      "id": "0cdab569-aab6-4773-9b23-b1d8b0728cc7",
+      "id": "0b6e9930-375f-4384-9c6c-f5a28a76dd0d",
       "name": "Split Out"
     },
     {
       "parameters": {
-        "schema": {
-          "__rl": true,
-          "value": "gitgrasp_schema",
-          "mode": "list",
-          "cachedResultName": "gitgrasp_schema"
-        },
-        "table": {
-          "__rl": true,
-          "value": "Syllabus",
-          "mode": "list",
-          "cachedResultName": "Syllabus"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "createdAt": "2025-05-31T23:56:43",
-            "updatedAt": "2025-05-31T23:56:45",
-            "projectId": "={{ $json.body.projectId }}",
-            "_id": "={{ Math.random().toString(36)}}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "_id",
-              "displayName": "_id",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "createdAt",
-              "displayName": "createdAt",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "updatedAt",
-              "displayName": "updatedAt",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "projectId",
-              "displayName": "projectId",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [
-        340,
-        -20
-      ],
-      "id": "5fdf528e-672b-48f6-b7a2-ede61b44e4a7",
-      "name": "Postgres",
-      "credentials": {
-        "postgres": {
-          "id": "VjESJEN8UuXK7gtx",
-          "name": "Postgres account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "['message.content.data'].subTopics",
+        "fieldToSplitOut": "['output.data'].subTopics",
         "include": "allOtherFields",
         "options": {}
       },
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        2440,
+        1852,
         0
       ],
-      "id": "b990a347-beb8-4204-ba22-cddcee1ff295",
+      "id": "40d2ad7a-2e92-4e21-8178-bc67fecdc2e4",
       "name": "Split Out1"
     },
     {
@@ -240,7 +94,7 @@
         "fieldsToAggregate": {
           "fieldToAggregate": [
             {
-              "fieldToAggregate": "message.content"
+              "fieldToAggregate": "output"
             }
           ]
         },
@@ -249,19 +103,56 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        1540,
+        1036,
         0
       ],
-      "id": "259ff037-565c-437b-9002-e355cf2a3f8b",
+      "id": "c80d0cb1-d3f1-4522-b963-95d0e6199fa5",
       "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Code: {{ $json.sourceCode }}",
+        "options": {
+          "systemMessage": "You are a code explainer agent. Summarize what the following file does. Be concise but informative."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "c21c3af6-23dd-460f-8181-6973d14c9df5",
+      "name": "Code Explainer Agent"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-coder:6.7b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        520,
+        300
+      ],
+      "id": "0aae9d82-3e03-4b63-8983-80a50d7e18b3",
+      "name": "Deepseek-coder:6.7b",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
     },
     {
       "parameters": {
         "schema": {
           "__rl": true,
-          "value": "gitgrasp_schema",
+          "value": "quiz_schema",
           "mode": "list",
-          "cachedResultName": "gitgrasp_schema"
+          "cachedResultName": "quiz_schema"
         },
         "table": {
           "__rl": true,
@@ -272,16 +163,16 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "level": "={{ $json['[\\'message.content.data\\'].subTopics'].level }}",
+            "level": "={{ $json['[\\'output.data\\'].subTopics'].level }}",
             "_id": "={{ Math.random().toString(36)}}",
-            "name": "={{ $json['message.content.data'].topic }}",
-            "description": "={{ $json['[\\'message.content.data\\'].subTopics'].description }}",
-            "updatedAt": "2025-06-01T03:57:37",
-            "createdAt": "2025-06-01T03:57:39",
-            "syllabusId": "={{ $('Postgres').item.json._id }}",
-            "framework": "={{ $json['message.content.data'].framework }}",
-            "language": "={{ $json['message.content.data'].language }}",
-            "subTopic": "={{ $json['[\\'message.content.data\\'].subTopics'].subTopic }}"
+            "name": "={{ $json['output.data'].topic }}",
+            "description": "={{ $json['[\\'output.data\\'].subTopics'].description }}",
+            "updatedAt": "={{ $now }}",
+            "createdAt": "={{ $now }}",
+            "syllabusId": "={{ $('Create Syllabus').item.json._id }}",
+            "framework": "={{ $json['output.data'].framework }}",
+            "language": "={{ $json['output.data'].language }}",
+            "subTopic": "={{ $json['[\\'output.data\\'].subTopics'].subTopic }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -384,26 +275,215 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        2660,
+        2072,
         0
       ],
-      "id": "0f1d4671-9262-44d0-b283-a03ef4d85d5f",
-      "name": "Postgres1",
+      "id": "9736c702-db1a-4e1a-8aee-5256387d0da4",
+      "name": "Insert Topics",
       "credentials": {
         "postgres": {
-          "id": "VjESJEN8UuXK7gtx",
-          "name": "Postgres account"
+          "id": "KkozY7WBDq2aMUhk",
+          "name": "Gitgrasp Cloud Database"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "deepseek-coder:6.7b",
+        "options": {
+          "format": "json"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        0,
+        360
+      ],
+      "id": "d044cd88-70d4-4baf-a8bb-7307c1618535",
+      "name": "deepseek-r1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Code Summaries: {{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Given the following code summaries from a project, group them into topics and subtopics.\n\nFor each, return:\n- Topic (e.g., \"Authentication\")\n- Language used ( One of \"Typescript\", \"Javascript\", \"Json\", \"Yaml/yml\" , \"Bash\", \"Python\", \"Mdx\", \"Css\", \"Html\" \"Misc\", if not identified put in \"Misc\" )\n- Framework (One of \"Next.js\", \"Docker\", \"Node.js\", \"Misc\", if not identified put in \"Misc\")\n- One or more subTopics:\n    - Name\n    - Description\n    - Difficulty level from 1–10, representing the depth of mastery required to understand how this concept is used in this project\n\nReturn a JSON array like:\n{\"data\":\n[\n  {\n    \"topic\": \"Authentication\",\n    \"language\": \"Typescript\",\n    \"framework\": \"Next.js\",\n    \"subTopics\": [\n      {\n        \"subTopic\": \"JWT Authentication\",\n        \"description\": \"Handling user authentication via JSON Web Tokens with custom middleware.\",\n        \"level\": 7\n      }\n    ]\n  }\n]}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1256,
+        0
+      ],
+      "id": "8fd84f4b-a3cd-46f5-9b35-8fff072406e7",
+      "name": "Seperate it into Topic, Difficulty, language, Framework and Subtopic1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"data\":\n[\n  {\n    \"topic\": \"Authentication\",\n    \"language\": \"TypeScript\",\n    \"framework\": \"Next.js\",\n    \"subTopics\": [\n      {\n        \"subTopic\": \"JWT Authentication\",\n        \"description\": \"Handling user authentication via JSON Web Tokens with custom middleware.\",\n        \"level\": 7\n      }\n    ]\n  }\n]}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1404,
+        220
+      ],
+      "id": "a14d0cf2-cc6a-4faa-a348-96d7f341d2e2",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": "openai/o3-mini",
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1284,
+        220
+      ],
+      "id": "a35cc4a9-9587-41a9-bf3e-43610d8bf5b3",
+      "name": "o3-mini",
+      "credentials": {
+        "openRouterApi": {
+          "id": "3ihmfep3vLGcUNKZ",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "quiz_schema",
+          "mode": "list",
+          "cachedResultName": "quiz_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "Syllabus",
+          "mode": "list",
+          "cachedResultName": "Syllabus"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "createdAt": "2025-05-31T23:56:43",
+            "updatedAt": "2025-05-31T23:56:45",
+            "projectId": "={{ $json.body.projectId }}",
+            "_id": "={{ Math.random().toString(36)}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "_id",
+              "displayName": "_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updatedAt",
+              "displayName": "updatedAt",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "projectId",
+              "displayName": "projectId",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        220,
+        0
+      ],
+      "id": "0291db65-66b9-4def-9164-631d5a00e03e",
+      "name": "Create Syllabus",
+      "credentials": {
+        "postgres": {
+          "id": "KkozY7WBDq2aMUhk",
+          "name": "Gitgrasp Cloud Database"
         }
       }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.bsamaritan.net",
+            "user-agent": "axios/1.8.4",
+            "content-length": "125",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "2405:201:c43c:56:5dfd:271e:3298:512",
+            "cf-ipcountry": "IN",
+            "cf-ray": "95cfeb4bcac389b8-SIN",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "e5f0655a-6ee5-404e-a67c-14d114f0bc98",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "x-forwarded-for": "2405:201:c43c:56:5dfd:271e:3298:512",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "projectId": "cmcxc9kgc00d4w1pwylfl03hn",
+            "githubUrl": "https://github.com/anoopkarnik/portfolio-boilerplate",
+            "githubToken": ""
+          },
+          "webhookUrl": "https://n8n.bsamaritan.net/webhook/c0a889f3-3256-4a75-a4b6-067413917ee3",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
   "connections": {
     "Webhook": {
       "main": [
         [
           {
-            "node": "Postgres",
+            "node": "Create Syllabus",
             "type": "main",
             "index": 0
           }
@@ -414,29 +494,7 @@
       "main": [
         [
           {
-            "node": "Explain Each Code File Function",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Explain Each Code File Function": {
-      "main": [
-        [
-          {
-            "node": "Aggregate",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Seperate it into Topic, Difficulty, language, Framework and Subtopic": {
-      "main": [
-        [
-          {
-            "node": "Split Out",
+            "node": "Code Explainer Agent",
             "type": "main",
             "index": 0
           }
@@ -454,22 +512,11 @@
         ]
       ]
     },
-    "Postgres": {
-      "main": [
-        [
-          {
-            "node": "Get all Files from a Repo",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Split Out1": {
       "main": [
         [
           {
-            "node": "Postgres1",
+            "node": "Insert Topics",
             "type": "main",
             "index": 0
           }
@@ -480,7 +527,78 @@
       "main": [
         [
           {
-            "node": "Seperate it into Topic, Difficulty, language, Framework and Subtopic",
+            "node": "Seperate it into Topic, Difficulty, language, Framework and Subtopic1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Explainer Agent": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deepseek-coder:6.7b": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code Explainer Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deepseek-r1": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Seperate it into Topic, Difficulty, language, Framework and Subtopic1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Seperate it into Topic, Difficulty, language, Framework and Subtopic1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "o3-mini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Seperate it into Topic, Difficulty, language, Framework and Subtopic1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Syllabus": {
+      "main": [
+        [
+          {
+            "node": "Get all Files from a Repo",
             "type": "main",
             "index": 0
           }
@@ -492,11 +610,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "36033fd0-a25b-45db-b0c8-626a1c727123",
+  "versionId": "bce0f292-c392-47e6-9ff0-cc2c9de115cc",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "3ea3309fa20b7f3f323ca8f5d7472e74e7934f6f5b29e1bf57d9f03c0707feb5"
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
   },
-  "id": "rIMEEBbDLwK9ORwo",
+  "id": "MSU5rdYWIJIFP52G",
   "tags": []
 }

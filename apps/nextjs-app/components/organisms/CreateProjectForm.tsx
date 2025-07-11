@@ -15,17 +15,17 @@ import { MultiStepLoader } from '@repo/ui/organisms/aceternity/multi-step-loader
 import { IconSquareRoundedX } from "@tabler/icons-react";
 
 const loadingStates = [
-  { text: "Initializing project"},
-    { text: "Connecting to Github"},
-    { text: "Fetching repository details"},
-    { text: "Creating project in database"},
-    { text: "Getting repository files"},
-    { text: "Processing & summarizing files"},
-    { text: "Adding files and their summaries to the project database"},
-    { text: "Creating embedding for these summaries and updating the database"},
-    { text: "Finalizing setup"},
-    { text: "Project setup complete"},
-    { text: "Ready to use your project"}
+  { text: "Initializing project", duration: 100},
+    { text: "Connecting to Github", duration: 100},
+    { text: "Fetching repository details", duration: 1000},
+    { text: "Creating project in database", duration: 1000},
+    { text: "Getting repository files", duration: 1000},
+    { text: "Processing & summarizing files",duration: 15000},
+    { text: "Adding files and their summaries to the project database", duration: 15000},
+    { text: "Creating embedding for these summaries and updating the database", duration: 15000},
+    { text: "Finalizing setup", duration: 100},
+    { text: "Project setup complete", duration: 100},
+    { text: "Ready to use your project",duration: 100}
 ];
 
 const formSchema = z.object({
@@ -96,105 +96,109 @@ const CreateProjectForm = () => {
         }
     }
   return (
-    <div className='h-full p-4 space-y-2 max-w-3xl mx-auto'>
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 pb-10'>
-                <div className='space-y-2 w-full col-span-2'>
-                    <div>
-                        <h3 className='text-lg font-medium'>
-                            Link your Github Repository
-                        </h3>
-                        <p className='text-description'>
-                            Enter the URL of your Github repository and the name of your project.
-                        </p>
-                    </div>
-                    <Separator className='bg-primary/10' />
-                </div>
-                <div className='flex flex-col gap-4'>
-                    <FormField
-                        name='projectName'
-                        control={form.control}
-                        render={({field}) => (
-                            <FormItem className='col-span-2 md:col-span-1'>
-                                 <FormControl>
-                                    <Input disabled={isLoading} placeholder ="Project Name" {...field} />
-                                 </FormControl>
-                                 <FormMessage/>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        name='repoUrl'
-                        control={form.control}
-                        render={({field}) => (
-                            <FormItem className='col-span-2 md:col-span-1'>
-                                 <FormControl>
-                                    <Input disabled={isLoading} placeholder ="Repository URL" {...field} />
-                                 </FormControl>
-                                 <FormMessage/>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        name='githubToken'
-                        control={form.control}
-                        render={({field}) => (
-                            <FormItem className='col-span-2 md:col-span-1'>
-                                 <FormControl>
-                                    <Input disabled={isLoading} placeholder ="Github Token (Optional)" {...field} />
-                                 </FormControl>
-                                 <FormMessage/>
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                {!!checkCredits && (
-                    <>
-                        <div className='mt-4 bg-destructive/40 px-4 py-2 rounded-md border border-destructive '>
-                            <div className='flex items-center gap-2'>
-                                <Info className='size-4'/>
-                                <p className='text-sm'>You will be charged <strong>{checkCredits?.fileCount}</strong> credits for this repository.
-                                </p>
-                            </div>
-                            <p className='text-sm text-primary ml-6'>
-                                You have <strong>{checkCredits?.userCredits}</strong> credits remaining.
+    <>
+        <div className='h-full p-4 space-y-2 max-w-3xl mx-auto'>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 pb-10'>
+                    <div className='space-y-2 w-full col-span-2'>
+                        <div>
+                            <h3 className='text-lg font-medium'>
+                                Link your Github Repository
+                            </h3>
+                            <p className='text-description'>
+                                Enter the URL of your Github repository and the name of your project.
                             </p>
                         </div>
-                    </>
-                )}
-                {!checkCredits && (
-                    <>
-                        <div className='mt-4 bg-destructive/40 px-4 py-2 rounded-md border border-destructive'>
-                            <div className='flex items-center gap-2'>
-                                <Info className='size-4'/>
-                                <p className='text-sm'>
-                                    Check the credits cost before connecting your Github repository.
+                        <Separator className='bg-primary/10' />
+                    </div>
+                    <div className='flex flex-col gap-4'>
+                        <FormField
+                            name='projectName'
+                            control={form.control}
+                            render={({field}) => (
+                                <FormItem className='col-span-2 md:col-span-1'>
+                                    <FormControl>
+                                        <Input disabled={isLoading} placeholder ="Project Name" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name='repoUrl'
+                            control={form.control}
+                            render={({field}) => (
+                                <FormItem className='col-span-2 md:col-span-1'>
+                                    <FormControl>
+                                        <Input disabled={isLoading} placeholder ="Repository URL" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name='githubToken'
+                            control={form.control}
+                            render={({field}) => (
+                                <FormItem className='col-span-2 md:col-span-1'>
+                                    <FormControl>
+                                        <Input disabled={isLoading} placeholder ="Github Token (Optional)" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    {!!checkCredits && (
+                        <>
+                            <div className='mt-4 bg-destructive/40 px-4 py-2 rounded-md border border-destructive '>
+                                <div className='flex items-center gap-2'>
+                                    <Info className='size-4'/>
+                                    <p className='text-sm'>You will be charged <strong>{checkCredits?.fileCount}</strong> credits for this repository.
+                                    </p>
+                                </div>
+                                <p className='text-sm text-primary ml-6'>
+                                    You have <strong>{checkCredits?.userCredits}</strong> credits remaining.
                                 </p>
                             </div>
-                        </div>
-                    </>
-                )}
-                <div className='w-full flex justify-center gap-4'>
-                    {!checkCredits && <Button size='lg'  disabled={isLoading} >
-                        Check Credits Cost
-                    </Button>}
-                    {!!checkCredits && <Button size='lg' disabled={isLoading || !checkCredits || (checkCredits?.userCredits < checkCredits?.fileCount)} 
-                       onClick={()=> setLoadingRepository(true)} >
-                        Connect Your Github Repository
-                    </Button>}
-                </div>
-            </form>
-        </Form>
-        <MultiStepLoader loadingStates={loadingStates} loading={loadingRepository} duration={2000} />
-         {loadingRepository && (
-        <button
-          className="fixed top-4 right-4 z-[120]"
-          onClick={() => setLoadingRepository(false)}
-        >
-          <IconSquareRoundedX className="h-10 w-10" />
-        </button>
-      )}
-    </div>
+                        </>
+                    )}
+                    {!checkCredits && (
+                        <>
+                            <div className='mt-4 bg-destructive/40 px-4 py-2 rounded-md border border-destructive'>
+                                <div className='flex items-center gap-2'>
+                                    <Info className='size-4'/>
+                                    <p className='text-sm'>
+                                        Check the credits cost before connecting your Github repository.
+                                    </p>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    <div className='w-full flex justify-center gap-4'>
+                        {!checkCredits && <Button size='lg'  disabled={isLoading} >
+                            Check Credits Cost
+                        </Button>}
+                        {!!checkCredits && <Button size='lg' disabled={isLoading || !checkCredits || (checkCredits?.userCredits < checkCredits?.fileCount)} 
+                        onClick={()=> setLoadingRepository(true)} >
+                            Connect Your Github Repository
+                        </Button>}
+                    </div>
+                </form>
+            </Form>
+           
+            {loadingRepository && (
+            <button
+            className="fixed top-4 right-4 z-[120]"
+            onClick={() => setLoadingRepository(false)}
+            >
+            <IconSquareRoundedX className="h-10 w-10" />
+            </button>
+        )}
+        </div>
+        <MultiStepLoader loadingStates={loadingStates} loading={loadingRepository} loop={false}/>
+    </>
+    
   )
 }
 

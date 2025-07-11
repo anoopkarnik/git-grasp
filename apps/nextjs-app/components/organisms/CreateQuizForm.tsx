@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 const formSchema = z.object({
     totalQuestions: z.number().min(1, {message: "Number of questions is required"}).max(20, {message: "Maximum number of questions is 20"}),
-    type: z.enum(["subjective","multiple_choice","true/false"], )
+    type: z.enum(["subjective","multiple_choice"], )
 })
 
 const CreateQuizForm = ({topicIds}:{topicIds:string[]}) => {
@@ -101,7 +101,6 @@ const CreateQuizForm = ({topicIds}:{topicIds:string[]}) => {
                                         <SelectContent>
                                             <SelectItem value="subjective">Subjective</SelectItem>
                                             <SelectItem value="multiple_choice">Multiple Choice</SelectItem>
-                                            <SelectItem value="true/false">True/False</SelectItem>
                                         </SelectContent>
                                     </Select>
                                  </FormControl>
