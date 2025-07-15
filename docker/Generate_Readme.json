@@ -1,0 +1,345 @@
+{
+  "name": "Generate Readme",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f10f8798-ee5b-459d-9484-1b548f72b33c",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "59771915-bd9e-48e0-b4aa-059dfba94bf0",
+      "name": "Webhook",
+      "webhookId": "f10f8798-ee5b-459d-9484-1b548f72b33c"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-r1:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        560,
+        280
+      ],
+      "id": "c26a0623-796d-4bcc-a426-536e41810610",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=file Summaries:  {{ $json.summary }}",
+        "options": {
+          "systemMessage": "=# Overview\n\nYou are an intelligent **Technical Writer Agent** designed to create production-ready `README.md` files in **MDX format** for GitHub repositories.\n\n---\n\n## 🧾 **Input**\n\nYou will be provided with:\n\n- ✅ **Summaries of code files** in the repository\n- ✅ (Optional) **Tech stack, usage scenarios**, or domain-specific notes\n- ✅ (Optional) **API endpoints, CLI tools**, or UI architecture info\n\n---\n\n## 🎯 **Your Objective**\n\nGenerate a structured and visually appealing `README.md` in **MDX** that:\n\n1. Explains the **purpose** of the project.\n2. Breaks down its **installation, usage, API**, and **architecture**.\n3. Uses **clean markdown** with MDX syntax for extensibility.\n4. Is **readable by devs, open-source contributors**, and product managers.\n\n---\n\n## 🧱 **Output Format (MDX)**\n\n```mdx\n# Project Title\n\n> A short tagline summarizing what this repo does.\n\n## ✨ Features\n\n- Feature 1\n- Feature 2\n- Frameworks/tools used\n\n## 🚀 Getting Started\n\n### Installation\n\n\\```bash\ngit clone https://github.com/username/repo-name.git\ncd repo-name\npnpm install\n\\```\n\n### Development\n\n\\```bash\npnpm dev\n\\```\n\n## 📦 Usage\n\n\\```ts\nimport { SomeComponent } from \"your-package\";\n\n<SomeComponent prop=\"value\" />\n\\```\n\nOr run:\n\n\\```bash\nnpx some-cli-tool --option\n\\```\n\n## 🧠 Architecture\n\n- `/src` — Core logic and utilities\n- `/api` — Serverless API routes\n- `/components` — UI components (Shadcn, Tailwind)\n- `/lib` — Shared libraries and helper functions\n\n## 🔌 API Reference\n\n\\```http\nPOST /api/analyze-code\n\\```\n\n**Request Body**:\n\n\\```json\n{\n  \"file\": \"utils/summarize.ts\"\n}\n\\```\n\n**Response**:\n\n\\```json\n{\n  \"summary\": \"Extracts high-level topics from source code.\"\n}\n\\```\n\n## 🛠 Tech Stack\n\n- Next.js 14 App Router\n- TailwindCSS + Shadcn\n- Prisma + PostgreSQL\n- OpenAI / DeepSeek / Ollama\n\n## 🤝 Contributing\n\nFork, PR, or create issues for discussion. Open-source is ❤️.\n\n## 📄 License\n\nMIT © 2025 [YourName or Org]\n\n---\n\n# Additional Notes\n\n💡 Pro Tip\n\nUse file summaries like:\n    agent.ts: Builds the AI LangChain agent\n    notion.ts: Handles Notion DB sync\n    db.ts: Stores query history with Prisma\n\nto enrich the Architecture, Features, and Usage sections in the README.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "a13ee359-c355-456c-ade3-0905c8bb8918",
+      "name": "Documentation Agent"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "github_schema",
+          "mode": "list",
+          "cachedResultName": "github_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "SourceCodeEmbedding",
+          "mode": "list",
+          "cachedResultName": "SourceCodeEmbedding"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "projectId",
+              "value": "={{ $json.body.projectId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        220,
+        0
+      ],
+      "id": "0114762a-4bf7-4bdd-8c5c-581814eaea20",
+      "name": "Get Source Code",
+      "credentials": {
+        "postgres": {
+          "id": "KkozY7WBDq2aMUhk",
+          "name": "Gitgrasp Cloud Database"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "=summary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "bce09b69-16d8-40a0-898c-22a6562316ad",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4.1",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        700,
+        260
+      ],
+      "id": "fa9c1dbc-dd87-4d87-b883-724685db06ad",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "3ihmfep3vLGcUNKZ",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "github_schema",
+          "mode": "list",
+          "cachedResultName": "github_schema"
+        },
+        "table": {
+          "__rl": true,
+          "value": "Documentation",
+          "mode": "list",
+          "cachedResultName": "Documentation"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "createdAt": "={{ $now }}",
+            "updatedAt": "={{ $now }}",
+            "projectId": "={{ $('Webhook').item.json.body.projectId }}",
+            "content": "={{ $json.output }}",
+            "type": "readme",
+            "_id": "={{ Math.random().toString(36).substring(2, 20) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "_id",
+              "displayName": "_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updatedAt",
+              "displayName": "updatedAt",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "projectId",
+              "displayName": "projectId",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1020,
+        0
+      ],
+      "id": "c3875388-8508-4b3d-9359-d3be82c93498",
+      "name": "Insert Readme",
+      "credentials": {
+        "postgres": {
+          "id": "KkozY7WBDq2aMUhk",
+          "name": "Gitgrasp Cloud Database"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.bsamaritan.net",
+            "user-agent": "axios/1.8.4",
+            "content-length": "41",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "183.82.232.82",
+            "cf-ipcountry": "IN",
+            "cf-ray": "95f0a3e32a2a7e6f-MAA",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "e5f0655a-6ee5-404e-a67c-14d114f0bc98",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "x-forwarded-for": "183.82.232.82",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "projectId": "cmbnt472a00cvswsw97zcb5ce"
+          },
+          "webhookUrl": "https://n8n.bsamaritan.net/webhook/f10f8798-ee5b-459d-9484-1b548f72b33c",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Source Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Get Source Code": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Documentation Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Documentation Agent": {
+      "main": [
+        [
+          {
+            "node": "Insert Readme",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Documentation Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "665035a9-ae11-4a9c-aba5-6798b41c504f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
+  },
+  "id": "JC1lTubXxnIZLSk6",
+  "tags": []
+}

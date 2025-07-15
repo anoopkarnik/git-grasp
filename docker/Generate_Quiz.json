@@ -134,7 +134,7 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n     \"Topic\": \"Theming & Styling\",\n     \"Subtopic\": \"Tailwind Configuration\",\n     \"Description\": \"Custom Tailwind CSS configuration files defining color palettes, dark mode, and global styles.\",\n     \"Difficulty Level\": 5,\n     \"Total Questions\" : 1,\n     \"Questions\": [\n       {\n      \"Number\": 1,\n      \"Type\": \"subjective\" ,\n      \"Marks\": \"5\",\n      \"Question\": \"\" ,\n      \"Answer\": \"\" \n       }\n     ]\n}"
+        "jsonSchemaExample": "{\n     \"Topic\": \"Theming & Styling\",\n     \"Subtopic\": \"Tailwind Configuration\",\n     \"Description\": \"Custom Tailwind CSS configuration files defining color palettes, dark mode, and global styles.\",\n     \"Difficulty Level\": 5,\n     \"Total Questions\" : 1,\n     \"Questions\": [\n       {\n      \"Type\": \"subjective\" ,\n      \"Marks\": \"5\",\n      \"Question\": \"\" ,\n      \"Answer\": \"\" \n       }\n     ]\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -144,24 +144,6 @@
       ],
       "id": "b140fa16-306d-41ca-bd4d-c7817ae6cb3c",
       "name": "Structured Output Parser"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=### Inputs:\n- **Topic Name**: {{ $json.name }}\n- **Subtopic Name**: {{ $json.subTopic }}\n- **Subtopic Description**: {{ $json.description }}\n- **Difficulty Level (1 to 10)**: {{ $json.level }}\n- **Number of Questions Required**: {{ $('Create Quiz Webhook').item.json.body.totalQuestions }}",
-        "hasOutputParser": true,
-        "options": {
-          "systemMessage": "=You are a smart Question Paper Generator AI.\n\nYour task is to create a **set of well-structured short and long answer questions** based on the following inputs:\n\n### Inputs:\n- **Topic Name**: [Insert Main Topic]\n- **Subtopic Name**: [Insert Subtopic Name]\n- **Subtopic Description**: [Briefly describe the subtopic]\n- **Difficulty Level (1 to 10)**: [Enter number]\n- **Number of Questions Required**: [Enter total number of questions]\n\n### Output Instructions:\n1. Output Format:\n  {\n     \"Topic\": ,\n     \"Subtopic\": ,\n     \"Description\": ,\n     \"Difficulty Level\": ,\n     \"Total Questions\" : ,\n     \"Questions\": [\n       {\n      \"Number\": ,\n      \"Type\": ,\n      \"Marks\": ,\n      \"Question\": ,\n      \"Answer\": \n       }\n     ]\n\n  }\n2. **Mix of Short and Long Answer Questions**:\n   - Divide the number of questions equally (or nearly equally) between short and long.\n   - Adjust question complexity according to the difficulty level.\n   - Use difficulty level to determine how conceptually deep or application-based each question is.\n\n3. **Question Format**:\n   - Each question should be numbered.\n   - Include the **question type**: Short or Long Answer.\n   - Assign **appropriate marks**: \n     - Short Answer = 2 or 3 marks \n     - Long Answer = 5 to 10 marks depending on difficulty\n\n4. **Question Clarity & Bloom’s Taxonomy**:\n   - Ensure questions assess a range of cognitive skills (Remember, Understand, Apply, Analyze, Evaluate, Create).\n   - Maintain clear, student-friendly language.\n\n5. **Output Format Example**:\n  {\n  \"Topic\": \"Algebra\",\n  \"Subtopic\": \"Quadratic Equations\",\n  \"Description\": \"This subtopic covers the formulation, solution, and application of quadratic equations.\",\n  \"Difficulty Level\": 7,\n  \"Total Questions\": 6,\n  \"Questions\": [\n    {\n      \"Number\": 1,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"Explain how the discriminant determines the nature of roots in a quadratic equation.\",\n      \"Answer\": \"The discriminant (D) of a quadratic equation ax² + bx + c = 0 is D = b² - 4ac. If D > 0: two real and distinct roots. If D = 0: two real and equal roots. If D < 0: two complex roots.\"\n    },\n    {\n      \"Number\": 2,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 2,\n      \"Question\": \"Write the standard form of a quadratic equation and give one example.\",\n      \"Answer\": \"The standard form is ax² + bx + c = 0. Example: 2x² - 3x + 1 = 0\"\n    },\n    {\n      \"Number\": 3,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 5,\n      \"Question\": \"Solve the equation x² - 5x + 6 = 0 and interpret its solution graphically.\",\n      \"Answer\": \"Factoring: x² - 5x + 6 = (x - 2)(x - 3) = 0. So, x = 2 and x = 3. Graphically, these are the x-intercepts of the parabola y = x² - 5x + 6.\"\n    },\n    {\n      \"Number\": 4,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 7,\n      \"Question\": \"A projectile follows the path y = -x² + 4x. Find its maximum height.\",\n      \"Answer\": \"Vertex form: y = -x² + 4x → complete the square: y = -(x² - 4x) = -(x² - 4x + 4 - 4) = -((x - 2)² - 4) = - (x - 2)² + 4. So, vertex is at (2, 4), maximum height = 4 units.\"\n    },\n    {\n      \"Number\": 5,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"What does 'completing the square' mean in solving a quadratic equation?\",\n      \"Answer\": \"It means rewriting a quadratic into a perfect square form like (x + p)² = q to solve it easily.\"\n    },\n    {\n      \"Number\": 6,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 10,\n      \"Question\": \"A ball is thrown upward with initial velocity 20 m/s from ground level. Using s = ut - ½gt², when will it hit the ground?\",\n      \"Answer\": \"Set s = 0, u = 20 m/s, g = 9.8 m/s². 0 = 20t - ½ × 9.8 × t² → 0 = t(20 - 4.9t) → t = 0 (start), t = 20 / 4.9 ≈ 4.08 seconds. Ball hits the ground after ~4.08 seconds.\"\n    }\n  ]\n}\n"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2,
-      "position": [
-        640,
-        -460
-      ],
-      "id": "aa36955e-5a92-4f4e-ba75-bacd8ff07092",
-      "name": "Generate Quiz Agent"
     },
     {
       "parameters": {
@@ -374,8 +356,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        668,
-        260
+        560,
+        280
       ],
       "id": "206d5472-e344-4c1a-913d-c713acfa5ca5",
       "name": "OpenAI Chat Model1",
@@ -388,7 +370,7 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n     \"Topic\": \"Theming & Styling\",\n     \"Subtopic\": \"Tailwind Configuration\",\n     \"Description\": \"Custom Tailwind CSS configuration files defining color palettes, dark mode, and global styles.\",\n     \"Difficulty Level\": 5,\n     \"Total Questions\" : 1,\n     \"Questions\": [\n       {\n      \"Number\": 1,\n      \"Type\": \"subjective\" ,\n      \"Marks\": \"5\",\n      \"Question\": \"\" ,\n      \"Answer\": \"\" \n       }\n     ]\n}"
+        "jsonSchemaExample": "{\n  \"Topic\": \"Algebra\",\n  \"Subtopic\": \"Quadratic Equations\",\n  \"Description\": \"This subtopic covers the formulation, solution, and application of quadratic equations.\",\n  \"Difficulty Level\": 7,\n  \"Total Questions\": 1,\n  \"Questions\": [\n    {\n      \"Type\": \"Multiple Choice\",\n      \"Marks\": 3,\n      \"Question\": \"What is the discriminant of the quadratic equation x² - 4x + 3 = 0?\",\n      \"Options\": [\n        \"10\",\n        \"4\",\n        \"1\",\n        \"16\"\n      ],\n      \"Answer\": \"4\"\n    }\n  ]\n}\n"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -398,24 +380,6 @@
       ],
       "id": "e08f0827-9f66-45c6-add8-d112b631472a",
       "name": "Structured Output Parser1"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=### Inputs:\n- **Topic Name**: {{ $json.name }}\n- **Subtopic Name**: {{ $json.subTopic }}\n- **Subtopic Description**: {{ $json.description }}\n- **Difficulty Level (1 to 10)**: {{ $json.level }}\n- **Number of Questions Required**: {{ $('Create Quiz Webhook').item.json.body.totalQuestions }}",
-        "hasOutputParser": true,
-        "options": {
-          "systemMessage": "=You are a smart Question Paper Generator AI.\n\nYour task is to create a **set of multiple choice questions** based on the following inputs:\n\n### Inputs:\n- **Topic Name**: [Insert Main Topic]\n- **Subtopic Name**: [Insert Subtopic Name]\n- **Subtopic Description**: [Briefly describe the subtopic]\n- **Difficulty Level (1 to 10)**: [Enter number]\n- **Number of Questions Required**: [Enter total number of questions]\n\n### Output Instructions:\n1. Output Format:\n  {\n     \"Topic\": ,\n     \"Subtopic\": ,\n     \"Description\": ,\n     \"Difficulty Level\": ,\n     \"Total Questions\" : ,\n     \"Questions\": [\n       {\n      \"Number\": ,\n      \"Type\": ,\n      \"Marks\": ,\n      \"Question\": ,\n      \"Answer\": \n       }\n     ]\n\n  }\n2. **Mix of Short and Long Answer Questions**:\n   - Divide the number of questions equally (or nearly equally) between short and long.\n   - Adjust question complexity according to the difficulty level.\n   - Use difficulty level to determine how conceptually deep or application-based each question is.\n\n3. **Question Format**:\n   - Each question should be numbered.\n   - Include the **question type**: Short or Long Answer.\n   - Assign **appropriate marks**: \n     - Short Answer = 2 or 3 marks \n     - Long Answer = 5 to 10 marks depending on difficulty\n\n4. **Question Clarity & Bloom’s Taxonomy**:\n   - Ensure questions assess a range of cognitive skills (Remember, Understand, Apply, Analyze, Evaluate, Create).\n   - Maintain clear, student-friendly language.\n\n5. **Output Format Example**:\n  {\n  \"Topic\": \"Algebra\",\n  \"Subtopic\": \"Quadratic Equations\",\n  \"Description\": \"This subtopic covers the formulation, solution, and application of quadratic equations.\",\n  \"Difficulty Level\": 7,\n  \"Total Questions\": 6,\n  \"Questions\": [\n    {\n      \"Number\": 1,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"Explain how the discriminant determines the nature of roots in a quadratic equation.\",\n      \"Answer\": \"The discriminant (D) of a quadratic equation ax² + bx + c = 0 is D = b² - 4ac. If D > 0: two real and distinct roots. If D = 0: two real and equal roots. If D < 0: two complex roots.\"\n    },\n    {\n      \"Number\": 2,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 2,\n      \"Question\": \"Write the standard form of a quadratic equation and give one example.\",\n      \"Answer\": \"The standard form is ax² + bx + c = 0. Example: 2x² - 3x + 1 = 0\"\n    },\n    {\n      \"Number\": 3,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 5,\n      \"Question\": \"Solve the equation x² - 5x + 6 = 0 and interpret its solution graphically.\",\n      \"Answer\": \"Factoring: x² - 5x + 6 = (x - 2)(x - 3) = 0. So, x = 2 and x = 3. Graphically, these are the x-intercepts of the parabola y = x² - 5x + 6.\"\n    },\n    {\n      \"Number\": 4,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 7,\n      \"Question\": \"A projectile follows the path y = -x² + 4x. Find its maximum height.\",\n      \"Answer\": \"Vertex form: y = -x² + 4x → complete the square: y = -(x² - 4x) = -(x² - 4x + 4 - 4) = -((x - 2)² - 4) = - (x - 2)² + 4. So, vertex is at (2, 4), maximum height = 4 units.\"\n    },\n    {\n      \"Number\": 5,\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"What does 'completing the square' mean in solving a quadratic equation?\",\n      \"Answer\": \"It means rewriting a quadratic into a perfect square form like (x + p)² = q to solve it easily.\"\n    },\n    {\n      \"Number\": 6,\n      \"Type\": \"Long Answer\",\n      \"Marks\": 10,\n      \"Question\": \"A ball is thrown upward with initial velocity 20 m/s from ground level. Using s = ut - ½gt², when will it hit the ground?\",\n      \"Answer\": \"Set s = 0, u = 20 m/s, g = 9.8 m/s². 0 = 20t - ½ × 9.8 × t² → 0 = t(20 - 4.9t) → t = 0 (start), t = 20 / 4.9 ≈ 4.08 seconds. Ball hits the ground after ~4.08 seconds.\"\n    }\n  ]\n}\n"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2,
-      "position": [
-        640,
-        40
-      ],
-      "id": "82c5f067-eadc-4120-b0f3-7f08ffb93a1f",
-      "name": "Generate Quiz Agent1"
     },
     {
       "parameters": {
@@ -456,7 +420,8 @@
             "quizId": "={{ $('Create Quiz Webhook').item.json.body.quizId }}",
             "type": "=multiple_choice",
             "scoreMax": "={{ $json.Marks }}",
-            "topicId": "={{ $('Get Topic Descriptions1').item.json._id }}"
+            "topicId": "={{ $('Get Topic Descriptions1').item.json._id }}",
+            "options": "={{ $json.Options}}"
           },
           "matchingColumns": [],
           "schema": [
@@ -591,6 +556,42 @@
           "name": "Gitgrasp Cloud Database"
         }
       }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=### Inputs:\n- **Topic Name**: {{ $json.name }}\n- **Subtopic Name**: {{ $json.subTopic }}\n- **Subtopic Description**: {{ $json.description }}\n- **Difficulty Level (1 to 10)**: {{ $json.level }}\n- **Number of Questions Required**: {{ $('Create Quiz Webhook').item.json.body.totalQuestions }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Overview\n\nYou are a smart **Multiple Choice Question (MCQ) Paper Generator AI**.\n\nYour task is to create a set of high-quality, well-structured multiple choice questions (MCQs) based on the following inputs:\n\n## Inputs\n\n- **Topic Name**: [Insert Main Topic]\n- **Subtopic Name**: [Insert Subtopic Name]\n- **Subtopic Description**: [Briefly describe the subtopic]\n- **Difficulty Level (1 to 10)**: [Enter number]\n- **Number of Questions Required**: [Enter total number of questions]\n\n---\n\n## Output Instructions\n\n1. **Output Format**  \n   Output ONLY a single JSON object, structured as shown:\n\n   ```json\n   {\n     \"Topic\": \"\",\n     \"Subtopic\": \"\",\n     \"Description\": \"\",\n     \"Difficulty Level\": ,\n     \"Total Questions\": ,\n     \"Questions\": [\n       {\n         \"Type\": \"Multiple Choice\",\n         \"Marks\": ,\n         \"Question\": \"\",\n         \"Options\": [\"\", \"\", \"\", \"\"],\n         \"Answer\": \"\"\n       }\n     ]\n   }\n\n2. **Question Construction**\n\n    Every question must be Multiple Choice (MCQ) with exactly four options.\n    Only one correct answer per question. Mark the correct answer clearly.\n    Assign appropriate marks:\n        Easy = 1 mark, Medium = 2–3 marks, Hard = 4–5 marks (align with provided difficulty).\n    Vary questions by conceptual depth and real-life application, based on difficulty.\n    Randomize the placement of the correct answer among options.\n\n3. **Options & Explanations**\n\n    Ensure all four options are plausible, not trivial distractors.\n    Explanation (optional but recommended): Briefly clarify why the answer is correct or point out a common misconception.\n\n4. **Bloom’s Taxonomy & Clarity**\n\n    Cover a range of skills: Remember, Understand, Apply, Analyze.\n    Use clear, student-friendly language.\n    Avoid ambiguity in both questions and options.\n\n## Sample Output\n\n{\n  \"Topic\": \"Algebra\",\n  \"Subtopic\": \"Quadratic Equations\",\n  \"Description\": \"This subtopic covers the formulation, solution, and application of quadratic equations.\",\n  \"Difficulty Level\": 7,\n  \"Total Questions\": 3,\n  \"Questions\": [\n    {\n      \"Type\": \"Multiple Choice\",\n      \"Marks\": 3,\n      \"Question\": \"What is the discriminant of the quadratic equation x² - 4x + 3 = 0?\",\n      \"Options\": [\n        \"10\",\n        \"4\",\n        \"1\",\n        \"16\"\n      ],\n      \"Answer\": \"4\"\n    },\n    {\n      \"Type\": \"Multiple Choice\",\n      \"Marks\": 4,\n      \"Question\": \"Which of the following quadratic equations has two distinct real roots?\",\n      \"Options\": [\n        \"x² + 2x + 1 = 0\",\n        \"x² - 5x + 6 = 0\",\n        \"x² + 4x + 4 = 0\",\n        \"x² + x + 1 = 0\"\n      ],\n      \"Answer\": \"x² - 5x + 6 = 0\"\n    },\n    {\n\n      \"Type\": \"Multiple Choice\",\n      \"Marks\": 5,\n      \"Question\": \"If the sum and product of the roots of a quadratic are 7 and 12, respectively, what is the equation?\",\n      \"Options\": [\n        \"x² - 7x + 12 = 0\",\n        \"x² + 7x + 12 = 0\",\n        \"x² - 12x + 7 = 0\",\n        \"x² + 12x - 7 = 0\"\n      ],\n      \"Answer\": \"x² - 7x + 12 = 0\"\n    }\n  ]\n}\n\n## Final Notes\n\n    Output only the JSON object—no commentary or formatting outside JSON.\n    Double-check all answer keys and explanations.\n    Mix conceptual, application-based, and tricky MCQs for a rich test."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        640,
+        40
+      ],
+      "id": "82c5f067-eadc-4120-b0f3-7f08ffb93a1f",
+      "name": "Generate MCQ Quiz Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=### Inputs:\n- **Topic Name**: {{ $json.name }}\n- **Subtopic Name**: {{ $json.subTopic }}\n- **Subtopic Description**: {{ $json.description }}\n- **Difficulty Level (1 to 10)**: {{ $json.level }}\n- **Number of Questions Required**: {{ $('Create Quiz Webhook').item.json.body.totalQuestions }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a smart Question Paper Generator AI.\n\nYour task is to create a **set of well-structured short and long answer questions** based on the following inputs:\n\n### Inputs:\n- **Topic Name**: [Insert Main Topic]\n- **Subtopic Name**: [Insert Subtopic Name]\n- **Subtopic Description**: [Briefly describe the subtopic]\n- **Difficulty Level (1 to 10)**: [Enter number]\n- **Number of Questions Required**: [Enter total number of questions]\n\n### Output Instructions:\n1. Output Format:\n  {\n     \"Topic\": ,\n     \"Subtopic\": ,\n     \"Description\": ,\n     \"Difficulty Level\": ,\n     \"Total Questions\" : ,\n     \"Questions\": [\n       {\n      \"Type\": ,\n      \"Marks\": ,\n      \"Question\": ,\n      \"Answer\": \n       }\n     ]\n\n  }\n2. **Mix of Short and Long Answer Questions**:\n   - Divide the number of questions equally (or nearly equally) between short and long.\n   - Adjust question complexity according to the difficulty level.\n   - Use difficulty level to determine how conceptually deep or application-based each question is.\n\n3. **Question Format**:\n   - Each question should be numbered.\n   - Include the **question type**: Short or Long Answer.\n   - Assign **appropriate marks**: \n     - Short Answer = 2 or 3 marks \n     - Long Answer = 5 to 10 marks depending on difficulty\n\n4. **Question Clarity & Bloom’s Taxonomy**:\n   - Ensure questions assess a range of cognitive skills (Remember, Understand, Apply, Analyze, Evaluate, Create).\n   - Maintain clear, student-friendly language.\n\n5. **Output Format Example**:\n  {\n  \"Topic\": \"Algebra\",\n  \"Subtopic\": \"Quadratic Equations\",\n  \"Description\": \"This subtopic covers the formulation, solution, and application of quadratic equations.\",\n  \"Difficulty Level\": 7,\n  \"Total Questions\": 6,\n  \"Questions\": [\n    {\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"Explain how the discriminant determines the nature of roots in a quadratic equation.\",\n      \"Answer\": \"The discriminant (D) of a quadratic equation ax² + bx + c = 0 is D = b² - 4ac. If D > 0: two real and distinct roots. If D = 0: two real and equal roots. If D < 0: two complex roots.\"\n    },\n    {\n      \"Type\": \"Short Answer\",\n      \"Marks\": 2,\n      \"Question\": \"Write the standard form of a quadratic equation and give one example.\",\n      \"Answer\": \"The standard form is ax² + bx + c = 0. Example: 2x² - 3x + 1 = 0\"\n    },\n    {\n      \"Type\": \"Long Answer\",\n      \"Marks\": 5,\n      \"Question\": \"Solve the equation x² - 5x + 6 = 0 and interpret its solution graphically.\",\n      \"Answer\": \"Factoring: x² - 5x + 6 = (x - 2)(x - 3) = 0. So, x = 2 and x = 3. Graphically, these are the x-intercepts of the parabola y = x² - 5x + 6.\"\n    },\n    {\n      \"Type\": \"Long Answer\",\n      \"Marks\": 7,\n      \"Question\": \"A projectile follows the path y = -x² + 4x. Find its maximum height.\",\n      \"Answer\": \"Vertex form: y = -x² + 4x → complete the square: y = -(x² - 4x) = -(x² - 4x + 4 - 4) = -((x - 2)² - 4) = - (x - 2)² + 4. So, vertex is at (2, 4), maximum height = 4 units.\"\n    },\n    {\n      \"Type\": \"Short Answer\",\n      \"Marks\": 3,\n      \"Question\": \"What does 'completing the square' mean in solving a quadratic equation?\",\n      \"Answer\": \"It means rewriting a quadratic into a perfect square form like (x + p)² = q to solve it easily.\"\n    },\n    {\n      \"Type\": \"Long Answer\",\n      \"Marks\": 10,\n      \"Question\": \"A ball is thrown upward with initial velocity 20 m/s from ground level. Using s = ut - ½gt², when will it hit the ground?\",\n      \"Answer\": \"Set s = 0, u = 20 m/s, g = 9.8 m/s². 0 = 20t - ½ × 9.8 × t² → 0 = t(20 - 4.9t) → t = 0 (start), t = 20 / 4.9 ≈ 4.08 seconds. Ball hits the ground after ~4.08 seconds.\"\n    }\n  ]\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        640,
+        -460
+      ],
+      "id": "aa36955e-5a92-4f4e-ba75-bacd8ff07092",
+      "name": "Generate Subjective Quiz Agent"
     }
   ],
   "pinData": {
@@ -600,29 +601,32 @@
           "headers": {
             "host": "n8n.bsamaritan.net",
             "user-agent": "axios/1.8.4",
-            "content-length": "106",
+            "content-length": "158",
             "accept": "application/json, text/plain, */*",
             "accept-encoding": "gzip, br",
             "cdn-loop": "cloudflare; loops=1",
-            "cf-connecting-ip": "2405:201:c43c:56:5dfd:271e:3298:512",
+            "cf-connecting-ip": "183.82.232.82",
             "cf-ipcountry": "IN",
-            "cf-ray": "95d053fbcb77a135-SIN",
+            "cf-ray": "95df7c229a377f3e-MAA",
             "cf-visitor": "{\"scheme\":\"https\"}",
             "cf-warp-tag-id": "e5f0655a-6ee5-404e-a67c-14d114f0bc98",
             "connection": "keep-alive",
             "content-type": "application/json",
-            "x-forwarded-for": "2405:201:c43c:56:5dfd:271e:3298:512",
+            "x-forwarded-for": "183.82.232.82",
             "x-forwarded-proto": "https"
           },
           "params": {},
           "query": {},
           "body": {
             "topicIds": [
-              "0.xyis61vze1c"
+              "0.ymbmyohybs",
+              "0.s8c5d0v2dle",
+              "0.p0d8ls27pjf",
+              "0.9ldlaniln3o"
             ],
-            "totalQuestions": 1,
-            "type": "subjective",
-            "quizId": "cmcxeu7p200q2w1pwy5ga4sa6"
+            "totalQuestions": 2,
+            "type": "multiple_choice",
+            "quizId": "cmd01goil0003sw0iye0rd0gh"
           },
           "webhookUrl": "https://n8n.bsamaritan.net/webhook/generate-quiz",
           "executionMode": "production"
@@ -664,7 +668,7 @@
       "main": [
         [
           {
-            "node": "Generate Quiz Agent",
+            "node": "Generate Subjective Quiz Agent",
             "type": "main",
             "index": 0
           }
@@ -675,7 +679,7 @@
       "ai_languageModel": [
         [
           {
-            "node": "Generate Quiz Agent",
+            "node": "Generate Subjective Quiz Agent",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -686,19 +690,8 @@
       "ai_outputParser": [
         [
           {
-            "node": "Generate Quiz Agent",
+            "node": "Generate Subjective Quiz Agent",
             "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Generate Quiz Agent": {
-      "main": [
-        [
-          {
-            "node": "Split Out Questions",
-            "type": "main",
             "index": 0
           }
         ]
@@ -724,7 +717,7 @@
       "main": [
         [
           {
-            "node": "Generate Quiz Agent1",
+            "node": "Generate MCQ Quiz Agent",
             "type": "main",
             "index": 0
           }
@@ -735,7 +728,7 @@
       "ai_languageModel": [
         [
           {
-            "node": "Generate Quiz Agent1",
+            "node": "Generate MCQ Quiz Agent",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -746,19 +739,8 @@
       "ai_outputParser": [
         [
           {
-            "node": "Generate Quiz Agent1",
+            "node": "Generate MCQ Quiz Agent",
             "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Generate Quiz Agent1": {
-      "main": [
-        [
-          {
-            "node": "Split Out Questions1",
-            "type": "main",
             "index": 0
           }
         ]
@@ -774,13 +756,35 @@
           }
         ]
       ]
+    },
+    "Generate MCQ Quiz Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out Questions1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Subjective Quiz Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out Questions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "fded51df-1d34-4b4b-a90c-ea60f8fde848",
+  "versionId": "e3ba8100-9989-4481-bf14-ccf80f46cbb5",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
