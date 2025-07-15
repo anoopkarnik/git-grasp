@@ -13,6 +13,7 @@ const ByTopicsTab = () => {
       const { projectId } = useProject();
       const [agentRunning] = useState(false);
       const [uniqueTopics, setUniqueTopics] = useState<string[]>([]);
+      const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
       const { data: topics = [] } = useTopics(projectId ?? "", agentRunning);
 
       // Update unique topics
@@ -32,8 +33,10 @@ const ByTopicsTab = () => {
                               <Button 
                                   variant='default'
                                   size={'sm'}
-                                  onClick={() => setOpen(true)}
-                              >
+                                  onClick={() => {
+                                    setOpen(true)
+                                    setSelectedTopic(uniqueTopic);}
+                                  }>
                                   Generate Quiz
                               </Button>
                           </div>
@@ -49,7 +52,7 @@ const ByTopicsTab = () => {
                       <Dialog open={open} onOpenChange={setOpen}>
                           <DialogContent>
                               <CreateQuizForm topicIds= {topics
-                              .filter(topic => topic.name === uniqueTopic)
+                              .filter(topic => topic.name === selectedTopic)
                               .map(topic => topic.id)
                           }/>
                           </DialogContent>

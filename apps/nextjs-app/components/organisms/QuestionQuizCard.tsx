@@ -6,6 +6,8 @@ import { Button } from '@repo/ui/atoms/shadcn/button';
 import { Textarea } from '@repo/ui/atoms/shadcn/textarea';
 import { getMarks } from '../../actions/openai';
 import { cn } from '@repo/ui/lib/utils';
+import { Mic } from 'lucide-react'
+import { useAudioRecorder } from '../../hooks/useAudioRecorder';
 
 const QuestionQuizCard = ({quizId}: {quizId:string}) => {
 
@@ -13,6 +15,10 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
     const [answers, setAnswers] = useState<string[]>([]);
     const [marksGiven, setMarksGiven] = useState<any[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const { startRecording, stopRecording, recording} = useAudioRecorder();
+    const [error, setError] = useState<string | null>(null);
+
 
     useEffect(() =>{
         const fetchQuestions = async () => {
@@ -52,16 +58,43 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
                 </div>
                 <div className=''>
                     {question?.type == 'subjective' && 
-                    <Textarea
-                        value={answers[index] || ""}
-                        onChange={(e) => {
-                            const newAnswers = [...answers];
-                            newAnswers[index] = e.target.value;
-                            setAnswers(newAnswers);
-                        }}
-                        placeholder="Type your answer here..."
-                        className="w-[60vw] min-h-[150px]"
-                    />}
+                    <div className="relative w-[60vw]">
+                        <Textarea
+                            value={answers[index] || ""}
+                            onChange={(e) => {
+                            const newAnswers = [...answers]
+                            newAnswers[index] = e.target.value
+                            setAnswers(newAnswers)
+                            }}
+                            placeholder="Type or speak your answer..."
+                            className="w-full min-h-[150px]"
+                        />
+
+                        {/* 🎙️ Mic Button */}
+                        <button
+                            onMouseDown={async () => {
+                            try {
+                                await startRecording()
+                            } catch (err) {
+                                setError("Mic access denied")
+                            }
+                            }}
+                            onMouseUp={async () => {
+                            const audioBlob = await stopRecording()
+                            const formData = new FormData();
+                            formData.append("file", audioBlob, "speech.webm");
+                            const response = await fetch("/api/ai/speechToText", { method: "POST",body: formData,});
+                            const conversation = await response.json();
+                            const newAnswers = [...answers]
+                            newAnswers[index] = (newAnswers[index] || "") + " " + conversation.text;
+                            setAnswers(newAnswers)
+                            }}
+                            className="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-full"
+                        >
+                            <Mic className="h-5 w-5" />
+                        </button>
+                        </div>
+}
                     {question?.type == 'multiple_choice' && (
                         <div className='flex flex-col gap-2'>
                             {question.options?.map((option: string, optionIndex: number) => (

@@ -36,3 +36,6 @@ export async function generateEmbedding(summary: string,modelType:string='text-e
     
       return embeddingResponse.data[0]?.embedding || [];
 }
+
+
+

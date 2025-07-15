@@ -36,6 +36,7 @@ const MarkdownPreview = ({ content }:{content:string}) => {
           Copy Markdown
         </Button>
       </div>
+      <div className="mt-10">
       <MDEditor.Markdown
         source={content}
         style={{
@@ -56,6 +57,7 @@ const MarkdownPreview = ({ content }:{content:string}) => {
           }
         }}
       />
+      </div>
     </div>
   );
 };

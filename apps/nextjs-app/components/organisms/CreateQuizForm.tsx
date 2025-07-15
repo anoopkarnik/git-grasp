@@ -67,6 +67,11 @@ const CreateQuizForm = ({topicIds}:{topicIds:string[]}) => {
                             Generate a quiz with a specified number of questions per subtopic. 
                         </p>
                     </div>
+                    {topicIds.map((topicId, index) => (
+                        <div key={index} className='text-sm text-muted-foreground'>
+                            Topic ID: {topicId}
+                        </div>
+                    ))}
                     <Separator className='bg-primary/10' />
                 </div>
                 <div className='flex flex-col gap-4'>

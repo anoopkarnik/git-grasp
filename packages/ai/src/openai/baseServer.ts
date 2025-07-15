@@ -4,6 +4,8 @@ import db from "@repo/prisma-db/client";
 import { symmetricDecrypt } from "../utils/encryption";
 import { auth } from "@repo/auth/better-auth/auth";
 import { headers } from "next/headers"
+import OpenAI from "openai";
+
 
 export async function getApiKeyFromType(connectionType: string="OpenAI") {
   const session = await auth.api.getSession({
@@ -27,3 +29,4 @@ export async function getApiKeyFromType(connectionType: string="OpenAI") {
 
   return plainConnectionAPIKey;
 }
+
