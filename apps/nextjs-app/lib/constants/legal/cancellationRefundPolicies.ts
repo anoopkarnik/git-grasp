@@ -7,6 +7,7 @@ const siteName = "Git Grasp"
 const companyLegalName = "Bayesian Labs (OPC) Private Limited"
 const websiteUrl = "https://gitgrasp.bayesian-labs.com"
 const lastUpdated = "2025-02-02"
+
 export const cancellationRefundPolicies:CancellationRefundPoliciesProps = {
     supportEmailAddress,
     siteName,

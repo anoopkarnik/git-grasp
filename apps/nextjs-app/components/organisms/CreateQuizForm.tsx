@@ -10,6 +10,7 @@ import { Button } from '@repo/ui/atoms/shadcn/button';
 import { useToast } from '@repo/ui/hooks/use-toast';
 import { createQuiz } from '../../actions/syllabus';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/molecules/shadcn/select';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     totalQuestions: z.number().min(1, {message: "Number of questions is required"}).max(20, {message: "Maximum number of questions is 20"}),
@@ -29,7 +30,7 @@ const CreateQuizForm = ({topicIds}:{topicIds:string[]}) => {
     const isLoading = form.formState.isSubmitting
 
     const {toast} = useToast()
-
+    const router = useRouter()
 
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -43,6 +44,7 @@ const CreateQuizForm = ({topicIds}:{topicIds:string[]}) => {
             })
 
             form.reset()
+            router.push('/quizzes')
 
 
         } catch(error){

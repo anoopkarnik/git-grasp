@@ -4,8 +4,6 @@ import { summariseCode } from "@repo/ai/openai/github"
 import { generateEmbedding } from "@repo/ai/openai/base"
 import db from "@repo/prisma-db/client"
 import { Octokit } from "octokit"
-import axios from "axios"
-import { summariseCodeN8N } from "../../actions/project"
 
 const getFileCount = async (path: string, octokit: Octokit, githubOwner: string, githubRepo: string, acc:number=0)=>{
     const {data} = await octokit.rest.repos.getContent({

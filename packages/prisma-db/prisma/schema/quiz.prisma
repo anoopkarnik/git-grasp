@@ -2,6 +2,8 @@ model Syllabus {
     id            String   @id @default(cuid()) @map("_id")
     topics        Topic[]
 
+    status        String   @default("processing")
+
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
@@ -37,6 +39,8 @@ model Quiz {
     questions     QuizQuestion[]
 
     totalQuestions Int
+    status        String   @default("processing")
+
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 

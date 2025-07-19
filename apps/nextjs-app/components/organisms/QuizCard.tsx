@@ -25,13 +25,13 @@ const QuizCard = ({quiz}:{quiz: Props}) => {
         <CardHeader>
             <div className='flex items-center gap-2 justify-start flex-wrap'>
                 <Badge className='bg-blue-400 hover:bg-blue-400'>
-                    {quiz.questions[0]?.topic?.language}
+                    {quiz.questions[0]?.topic?.framework}
                 </Badge>
                 <Badge className='bg-yellow-400 hover:bg-yellow-400'>
                     {quiz.questions[0]?.topic?.language}
                 </Badge>
                 <Badge className='bg-violet-400 hover:bg-violet-400'>
-                    Level {quiz.questions[0]?.topic?.language}
+                    Level {quiz.questions[0]?.topic?.level}
                 </Badge>
             </div>
         </CardHeader>

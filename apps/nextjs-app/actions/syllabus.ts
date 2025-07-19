@@ -12,7 +12,7 @@ export const createSyllabus = async (projectId: string) => {
 }
 
 
-export const getTopics = async (projectId:string) => {
+export const getTopics = async (projectId:string)=> {
     try {
         const syllabus = await db.syllabus.findUnique({
             where: {
@@ -20,7 +20,7 @@ export const getTopics = async (projectId:string) => {
             },
         });
         if (!syllabus) {
-            return [];
+            return {status: "NoSyllabus", topics:[]}
         }
 
         const topics = await db.topic.findMany({
@@ -38,9 +38,10 @@ export const getTopics = async (projectId:string) => {
                 createdAt: "asc"
             }
         });
-        return topics;
+        console.log("Syllabus status:", syllabus.status);
+        return {status: syllabus.status, topics};
     } catch (error) {
-        return []
+        return { status:"error" , topics: []};
     }
 }
 

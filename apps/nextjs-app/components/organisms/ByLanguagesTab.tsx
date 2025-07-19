@@ -1,6 +1,6 @@
 import { Button } from '@repo/ui/atoms/shadcn/button'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@repo/ui/molecules/shadcn/accordion'
-import {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import TopicCard from './TopicCard';
 import { Dialog, DialogContent } from '@repo/ui/molecules/shadcn/dialog';
 import CreateQuizForm from './CreateQuizForm';
@@ -13,8 +13,8 @@ const ByLanguagesTab = () => {
       const { projectId } = useProject();
       const [agentRunning] = useState(false);
       const [uniqueLanguages, setUniqueLanguages] = useState<string[]>([]);
-      const { data: topics = [] } = useTopics(projectId ?? "", agentRunning);
-
+        const { data } = useTopics(projectId ?? "", agentRunning);
+        const topics = useMemo(() => data?.topics ?? [], [data]);
       // Update unique topics
       useEffect(() => {
           if (!topics || topics.length === 0) return;

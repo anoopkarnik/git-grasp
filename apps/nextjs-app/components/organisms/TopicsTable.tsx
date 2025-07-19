@@ -1,7 +1,7 @@
 "use client"
 
 import { DataTable } from '@repo/ui/molecules/shadcn/data-table'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import useTopics from '../../hooks/useTopics'
 import useProject from '../../hooks/useProject'
 import { Button } from '@repo/ui/atoms/shadcn/button'
@@ -15,7 +15,8 @@ const assessmentLevels = [1,2,3,4,5,6,7,8,9,10];
 const TopicsTable = () => {
 
     const {projectId} = useProject()
-    const {data: topics = []} = useTopics(projectId ?? "", false);
+        const { data:topicsData } = useTopics(projectId ?? "", false);
+        const topics = useMemo(() => topicsData?.topics ?? [], [topicsData]);
     const [keys, setKeys] = useState<any[]>([]); // Use correct type for columns
     const [data, setData] = useState<any[]>([]); // Use correct type for data
     const [assessments, setAssessments] = useState<any[]>([]); // Store assessments for each topic
@@ -111,7 +112,7 @@ const TopicsTable = () => {
             setKeys(keys);
         }
         updateDatabase();
-      },[assessments, columns])
+      },[assessments])
 
   return (
     <>

@@ -16,9 +16,7 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
     const [marksGiven, setMarksGiven] = useState<any[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const { startRecording, stopRecording, recording} = useAudioRecorder();
-    const [error, setError] = useState<string | null>(null);
-
+    const { startRecording, stopRecording} = useAudioRecorder();
 
     useEffect(() =>{
         const fetchQuestions = async () => {
@@ -73,11 +71,7 @@ const QuestionQuizCard = ({quizId}: {quizId:string}) => {
                         {/* 🎙️ Mic Button */}
                         <button
                             onMouseDown={async () => {
-                            try {
-                                await startRecording()
-                            } catch (err) {
-                                setError("Mic access denied")
-                            }
+                              await startRecording()
                             }}
                             onMouseUp={async () => {
                             const audioBlob = await stopRecording()
